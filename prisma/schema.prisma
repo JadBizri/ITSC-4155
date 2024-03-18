@@ -16,7 +16,7 @@ datasource db {
 
 model Item {
     id          Int      @id @default(autoincrement())
-    name        String
+    title       String
     category    Category
     price       Float
     description String
@@ -29,7 +29,7 @@ model Item {
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
 
-    @@index([name])
+    @@index([title])
 }
 
 // Necessary for Next auth
