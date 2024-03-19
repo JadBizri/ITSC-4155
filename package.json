@@ -65,6 +65,6 @@
   "packageManager": "npm@10.2.3",
   "lint-staged": {
     "*": "prettier --ignore-unknown --write .",
-    "*.{mjs,js,jsx,ts,tsx}": "next lint --fix --ext mjs,js,jsx,ts,tsx"
+    "*.{mjs,js,jsx,ts,tsx}": "npx lint --fix --ext mjs,js,jsx,ts,tsx"
   }
 }
