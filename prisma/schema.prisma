@@ -15,21 +15,37 @@ datasource db {
 }
 
 model Item {
-    id          Int      @id @default(autoincrement())
-    title       String
-    category    Category
-    price       Float
-    description String
-    image       String
-    location    String
-    campus      String
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+    id           Int      @id @default(autoincrement())
+    title        String
+    slug         String   @unique
+    category     Category
+    price        Float
+    description  String
+    image        String[]
+    location     String
+    institution  String
+    condition    String
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+    visits       Int      @default(0)
+    UniqueVisits Int      @default(0)
 
-    createdBy   User   @relation(fields: [createdById], references: [id])
+    createdBy   User       @relation(fields: [createdById], references: [id])
     createdById String
+    Comments    Comments[]
 
     @@index([title])
+}
+
+model Comments {
+    id        Int      @id @default(autoincrement())
+    text      String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    author    User     @relation(fields: [authorId], references: [id])
+    authorId  String
+    item      Item     @relation(fields: [itemId], references: [id])
+    itemId    Int
 }
 
 // Necessary for Next auth
@@ -60,14 +76,15 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String     @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?    @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
     items         Item[]
+    Comments      Comments[]
 }
 
 model VerificationToken {
