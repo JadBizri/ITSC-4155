@@ -13,7 +13,7 @@ const products = response
 			title: product.title,
 			price: product.price,
 			description: product.description,
-			image: product.image,
+			images: product.images.map(image => image.replaceAll('[', '').replaceAll(']', '').replaceAll('"', '')),
 			createdAt: product.creationAt,
 			updatedAt: product.updatedAt,
 			category:
@@ -23,7 +23,7 @@ const products = response
 						? 'CLOTHING'
 						: product.category.name.toUpperCase(),
 			location: '28223',
-			institution: 'UNCC',
+			institution: 'UNC Charlotte',
 			slug: `${product.title.toLowerCase().replace(/ /g, '-')}-${rand(9)}`,
 			condition: 'good',
 			createdById: 'cltxhhv0e0002ya6lqtp1aylt',
@@ -31,14 +31,15 @@ const products = response
 	});
 
 async function main() {
-	// await db.item.createMany({
-	// 	data: products,
-	// });
+	await db.item.createMany({
+		data: products,
+	});
 
 	const items = await db.item.findMany();
 	console.log(items);
-	// const users = await db.user.findMany();
-	// console.log(users);
+
+	// const { count } = await db.item.deleteMany();
+	// console.log(count);
 }
 
 function rand(len: number) {
@@ -49,7 +50,7 @@ function rand(len: number) {
 	return x;
 }
 
-rand(9);
+// rand(9);
 
 main()
 	.then(async () => {
@@ -66,7 +67,7 @@ interface Product {
 	title: string;
 	price: number;
 	description: string;
-	image: string[];
+	images: string[];
 	creationAt: string;
 	updatedAt: string;
 	category: ProductCategory;

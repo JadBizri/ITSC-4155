@@ -14,7 +14,7 @@ export const itemRouter = createTRPCRouter({
 				category: z.enum(['TEXTBOOKS', 'ELECTRONICS', 'CLOTHING', 'ESSENTIALS', 'FURNITURE', 'OTHER']),
 				price: z.number().positive().safe(),
 				description: z.string().min(10).trim(),
-				image: z.array(z.string().url()),
+				images: z.array(z.string().url()),
 				location: z.string().min(5).trim(),
 				institution: z.string().min(3).trim(),
 				condition: z.enum(['NEW', 'LIKE_NEW', 'GOOD', 'FAIR', 'POOR']),
@@ -28,7 +28,7 @@ export const itemRouter = createTRPCRouter({
 					category: input.category,
 					price: input.price,
 					description: input.description,
-					image: input.image,
+					images: input.images,
 					location: input.location,
 					institution: input.institution,
 					condition: input.condition,
@@ -37,14 +37,11 @@ export const itemRouter = createTRPCRouter({
 			});
 		}),
 
-	getLatest: protectedProcedure.query(({ ctx }) => {
-		return ctx.db.item.findFirst({
-			orderBy: { createdAt: 'desc' },
-			where: { createdBy: { id: ctx.session.user.id } },
-		});
+	getItemSlug: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+		return ctx.db.item.findFirst({ where: { slug: input } });
 	}),
 
-	getSecretMessage: protectedProcedure.query(() => {
-		return 'you can now see this secret message!';
+	getItemMatchList: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+		return ctx.db.item.findMany({ where: { title: { contains: input, mode: 'insensitive' } } });
 	}),
 });

@@ -16,8 +16,7 @@ export default function Home() {
 			</Head>
 			<div className="relative flex min-h-screen flex-col bg-white dark:bg-zinc-950">
 				<SiteHeader />
-				{/* eslint-disable-next-line react/jsx-key */}
-				<div className="flex flex-wrap gap-7">{items.data?.map(item => <Item {...item} />)}</div>
+				<div className="flex flex-wrap gap-7">{items.data?.map(item => <Item key={item.id} {...item} />)}</div>
 			</div>
 		</>
 	);
