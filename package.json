@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^1.4.0",
+    "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@googlemaps/js-api-loader": "^1.16.6",
     "@prisma/client": "^5.10.2",
     "@radix-ui/react-aspect-ratio": "^1.0.3",
