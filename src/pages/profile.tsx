@@ -16,7 +16,7 @@ export default function Profile() {
 			<div className="relative flex min-h-screen flex-col bg-white dark:bg-zinc-950">
 				<SiteHeader />
 
-				<ProfileImage imageUrl="https://picsum.photos/seed/picsum/100" size={10} />
+				<ProfileImage imageUrl="https://picsum.photos/seed/picsum/4000" size="200px" />
 			</div>
 		</>
 	);
