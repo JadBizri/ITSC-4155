@@ -17,7 +17,7 @@ const MyApp: AppType<{ session: Session | null }> = ({ Component, pageProps: { s
 	return (
 		<SessionProvider session={session}>
 			<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-				<main className={`font-sans ${inter.variable}`}>
+				<main className={`font-sans ${inter.variable} min-h-screen bg-white dark:bg-zinc-950`}>
 					<Component {...pageProps} />
 				</main>
 			</ThemeProvider>

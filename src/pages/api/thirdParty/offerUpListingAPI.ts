@@ -5,39 +5,22 @@ interface SearchRequest {
 	searchQuery: string;
 	zipcode: string;
 }
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+
+const thirdParty = async (req: NextApiRequest, res: NextApiResponse) => {
 	try {
-		const { searchQuery, zipcode }: SearchRequest = req.body;
+		const { searchQuery, zipcode } = req.body as SearchRequest;
 
 		const payload = {
 			operationName: 'GetModularFeed',
 			variables: {
 				debug: false,
 				searchParams: [
-					{
-						key: 'q',
-						value: searchQuery,
-					},
-					{
-						key: 'platform',
-						value: 'web_mobile',
-					},
-					{
-						key: 'zipcode',
-						value: zipcode,
-					},
-					{
-						key: 'experiment_id',
-						value: 'experimentmodel24',
-					},
-					{
-						key: 'limit',
-						value: '50',
-					},
-					{
-						key: 'searchSessionId',
-						value: '3ea00de3-bf0c-4d8b-a3e2-12bed637a915',
-					},
+					{ key: 'q', value: searchQuery },
+					{ key: 'platform', value: 'web_mobile' },
+					{ key: 'zipcode', value: zipcode },
+					{ key: 'experiment_id', value: 'experimentmodel24' },
+					{ key: 'limit', value: '50' },
+					{ key: 'searchSessionId', value: '3ea00de3-bf0c-4d8b-a3e2-12bed637a915' },
 				],
 			},
 			query:
@@ -50,3 +33,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 		res.status(500).json({ error: 'Failed to fetch data from the external API' });
 	}
 };
+
+export default thirdParty;
