@@ -3,38 +3,45 @@ import { z } from 'zod';
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '~/server/api/trpc';
 
 export const itemRouter = createTRPCRouter({
-	hello: publicProcedure.input(z.object({ text: z.string() })).query(({ input }) => {
-		return {
-			greeting: `Hello ${input.text}`,
-		};
+	itemList: publicProcedure.query(async ({ ctx }) => {
+		return ctx.db.item.findMany();
 	}),
 
-	create: protectedProcedure.input(z.object({ title: z.string().min(1) })).mutation(async ({ ctx, input }) => {
-		// simulate a slow db call
-		await new Promise(resolve => setTimeout(resolve, 1000));
+	create: protectedProcedure
+		.input(
+			z.object({
+				title: z.string().min(1).trim(),
+				category: z.enum(['TEXTBOOKS', 'ELECTRONICS', 'CLOTHING', 'ESSENTIALS', 'FURNITURE', 'OTHER']),
+				price: z.number().positive().safe(),
+				description: z.string().min(10).trim(),
+				images: z.array(z.string().url()),
+				location: z.string().min(5).trim(),
+				institution: z.string().min(3).trim(),
+				condition: z.enum(['NEW', 'LIKE_NEW', 'GOOD', 'FAIR', 'POOR']),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return ctx.db.item.create({
+				data: {
+					title: input.title,
+					slug: input.title.toLowerCase().replace(/ /g, '-'),
+					category: input.category,
+					price: input.price,
+					description: input.description,
+					images: input.images,
+					location: input.location,
+					institution: input.institution,
+					condition: input.condition,
+					createdBy: { connect: { id: ctx.session.user.id } },
+				},
+			});
+		}),
 
-		return ctx.db.item.create({
-			data: {
-				title: input.title,
-				category: 'OTHER',
-				price: 0,
-				description: 'this is a description.',
-				image: 'https://via.placeholder.com/150',
-				location: 'Charlotte, NC',
-				campus: 'UNCC',
-				createdBy: { connect: { id: ctx.session.user.id } },
-			},
-		});
+	getItemSlug: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+		return ctx.db.item.findFirst({ where: { slug: input } });
 	}),
 
-	getLatest: protectedProcedure.query(({ ctx }) => {
-		return ctx.db.item.findFirst({
-			orderBy: { createdAt: 'desc' },
-			where: { createdBy: { id: ctx.session.user.id } },
-		});
-	}),
-
-	getSecretMessage: protectedProcedure.query(() => {
-		return 'you can now see this secret message!';
+	getItemMatchList: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+		return ctx.db.item.findMany({ where: { title: { contains: input, mode: 'insensitive' } } });
 	}),
 });

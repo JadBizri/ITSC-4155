@@ -1,9 +1,9 @@
-import { Search } from './search';
+import { SearchBar } from './search-bar';
 
 export function MainNav() {
 	return (
 		<div>
-			<Search placeholder="search" />
+			<SearchBar placeholder="Search" />
 		</div>
 	);
 }
