@@ -8,7 +8,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 	try {
 		const result = await client.verify.v2
 			.services(env.TWILIO_VERIFICATION_SERVICE_SID)
-			.verifications.create({ to: phoneNumber, channel: 'sms', locale: 'en' });
+			.verifications.create({ to: '+1' + phoneNumber, channel: 'sms', locale: 'en' });
 		if (result.status === 'pending') {
 			res.status(200).json({ msg: `Verification code sent!` });
 		} else {
