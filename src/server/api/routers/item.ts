@@ -37,4 +37,8 @@ export const itemRouter = createTRPCRouter({
 	getSecretMessage: protectedProcedure.query(() => {
 		return 'you can now see this secret message!';
 	}),
+
+	getUserItems: protectedProcedure.query(async ({ ctx }) => {
+		return ctx.db.item.findMany({ where: { createdBy: { id: ctx.session.user.id } } });
+	}),
 });
