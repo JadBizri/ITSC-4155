@@ -33,3 +33,5 @@ const thirdParty = async (req: NextApiRequest, res: NextApiResponse) => {
 		res.status(500).json({ error: 'Failed to fetch data from the external API' });
 	}
 };
+
+export default thirdParty;
