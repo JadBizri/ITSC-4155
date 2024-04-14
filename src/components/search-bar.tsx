@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Input } from './ui/input';
+import { Search } from 'lucide-react';
 
 export function SearchBar({ placeholder }: { placeholder: string }) {
 	const [searchTerm, setSearchTerm] = useState('');
@@ -21,12 +22,16 @@ export function SearchBar({ placeholder }: { placeholder: string }) {
 	}
 
 	return (
-		<Input
-			type="text"
-			placeholder={placeholder}
-			value={searchTerm}
-			onChange={e => setSearchTerm(e.target.value)}
-			onKeyDown={handleEnter}
-		/>
+		<div className="relative ml-auto flex-1 md:grow-0">
+			<Search className="text-muted-foreground absolute left-3 top-3 h-4 w-4" />
+			<Input
+				type="search"
+				placeholder={placeholder}
+				className="w-full rounded-lg pl-8 md:w-[200px] lg:w-[336px]"
+				value={searchTerm}
+				onChange={e => setSearchTerm(e.target.value)}
+				onKeyDown={handleEnter}
+			/>
+		</div>
 	);
 }
