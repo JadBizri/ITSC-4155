@@ -44,4 +44,8 @@ export const itemRouter = createTRPCRouter({
 	getItemMatchList: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
 		return ctx.db.item.findMany({ where: { title: { contains: input, mode: 'insensitive' } } });
 	}),
+
+	getUserItems: protectedProcedure.query(async ({ ctx }) => {
+		return ctx.db.item.findMany({ where: { createdBy: { id: ctx.session.user.id } } });
+	}),
 });
