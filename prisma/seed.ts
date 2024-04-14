@@ -31,15 +31,14 @@ const products = response
 	});
 
 async function main() {
+	console.log('Start seeding ...');
+	await db.item.deleteMany();
+
 	await db.item.createMany({
 		data: products,
 	});
 
-	const items = await db.item.findMany();
-	console.log(items);
-
-	// const { count } = await db.item.deleteMany();
-	// console.log(count);
+	console.log('Seeding completed.');
 }
 
 function rand(len: number) {
