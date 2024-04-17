@@ -33,6 +33,14 @@ export const thirdPartyHomeReload = async (req: NextApiRequest, res: NextApiResp
 			uniqueCategories[i] = uniqueCategories[j]!;
 			uniqueCategories[j] = temp;
 		}
+		const pageCursor: string[] = [
+			'H4sIAAAAAAAAAH2STYsbMQyG_4vPEfhDtse5LaGFhT0UFnpp9iDbcjKwmQnjpC2E_Pcq2bKwLezBB8uvXkmPdVGdaSn7Z-59nKfHqtaqy11bizqSyVk3zBhSKymWElt2HFlrtVJU-xP10_eRf3F9GvtpnHb3_BZbiKZm8KUSuJgIEjaG5HyzFVvRob3lb-apnw9cv_w-8TLR68MtdJ5Oaq1X6rjwz3E-92-043f7rtY_VPBJmgoRGuMADjEBxRxBs26WoonojRTQxtRIhcGT1yIrFXK1A1gqgXRrHglFZmUc6akAoTHgCkcYLItlTq7ZbAPex_UpRB-wAGsrbsUh5GQIQtCmYXDDUFlkmHjQPmQYmhBwVidIJVjIoUo96cfGm1t1eUjRVSiohVHSGahgBNca50rBF6zqZaUac30-0SJIghYo-_nAt9iGyp4fT3zYnJc-L3dg_7-9s5yXHU1jeRMLw8t1pfp-PB5vUCeB349yZAE-KD5kycdetn-35aFJyla-YqtMNM5p71Cjs1v1clWfOn_mErXHqIfwj8tXmuazjNHotfP1D7d-YZGxAgAA',
+			'H4sIAAAAAAAAAH2STWscMQyG_4vPK7D87dzC0kIgh0Kgl24OGlvaHcjOLOPZtrDsf683KYG0kIMPll-9kh7rohrTUg5P3No4Tw9V3anW79oYpyPhMGhxgwtZSo6lRBksR9ZabRTV9kht_T7yL66PY1vHaf-aL1FCxDqAL5XAxkyQnTBk68VUJ0UHecvfzlM7H7l--b3yMtHL_S10nlZ1pzfqtPDPcT63b7Tnd_um7n6o4msVthlCzgjWRQ2pxgAsJhYTCkVJvcCgLTtXEEo1ArZigWwSATr0MTksmGKXOXTGJHZQYuIuG1LvVAvoiDm4Ir3h2mVBoy_BMbC1AaypEQbtPGjRRCEJUri52Wx0QCsg0Q1gE-ZeVHuwVEkHK1TsrTckxpTiAEG7CLZwAULpyGIvYvt0VFE9b5Qw16eVlo7E6w7lMB_5FttSOfDDysfteWnz8grs_7d3lvOyp2ksb-LO8HLdqHYYT6cb1KnDb6d--gJ8UHzI6h972f3dlnvpKbv-FTuFEa1Fg4hG5516vqpPnT9zidp7673-x-UrTfO5jyH00vj6B8mLzPqxAgAA',
+			'H4sIAAAAAAAAAH2STWscMQyG_4vPK_DH-Cu3sLQQyKEQ6KWbgyzLuwPZmWU82xaW_e_VJiWQFnLwwfLzStYrXVRnXOjwxL2P8_RQ1Z3qctfWDjqiKUW3oQwhN8qRKLbiOLLWaqOw9kfs6_eRf3F9HPs6TvtXfYstRFMLeKoILmaEPDSG7HyzdWikQ3vTb-epn49cv_xeeZnw5f4WOk-rutMbdVr45zif-zfc83v6ru5-qKHYZjU28CHGW4EGWXuGQI0raUT5tRSoIRjtagLn2INLLkJxEcFnwhDJaulOMBqC9z4QVG2rsMYJVipQLJywxCYRwayPuRSbgF0icNkYSOwNcEqVOOeaXBIsBoNOVwvkjVSOZYCiawMu2pIhNJqCYCklQwUtoHEGnDUkLVAA1wLXWE1gT-p5oxpzfVpxEUsGLaYc5iPfYlukAz-sfNyelz4vr4b9__bu5bzscRrpDRYPL9eN6ofxdLqZOon5_SRHFuAD8UElg73s_m7LfRPJTkaxUyYasSzbaLNPO_V8VZ9m_ixL1D5kk_Q_Wb7iNJ-ljYYvna9_ABQkvGaxAgAA',
+			'H4sIAAAAAAAAAH2STWsbMRCG_4vOHtD3h2_BtBDIIRDopc5hJM3YC_GuWe2mBeP_XjkpgbSQgw6S3vcd6Zm5iEY4l-MTtTZM430VW9H6XmptZUCVs2SbrU9cUiglcDYUSEqxEVjbA7blx0C_qD4MbRnGw5ufA_ugagZXKoIJCSFZJkjGsa6Wi_T87t9NY1tPVL_9Xmge8eXudrSOi9jKjTjP9DpMa3vEA33EN7H9KTjpwIU1VBsSmJwTRC0NcAlBFhM5JuoFyHutXHXgkDyYKAmyMhGKixQ8spR4e4fU1kidJQTLFowhA9FxAU3FaaW97-4u8zHpFDSCyqoXJasgpeQgRVV8Uhir1F0WKrta0UJVsYLx0UPKSYKMFNGrToBuRT1Fpx0lCBF7WvQIOfsMir236LVRLonnjWCi-rTg3JEY2aEcpxPdznZYjnS_0Gm3zm2a34D9f_fBcpoPOA7lXdwZXq4b0Y7D-XyDOnb47dxXH4BPik-u3tjL_u-03HG37Hsr9kIFZYzx3oQo4148X8WXyV-lBOmiskb_k_Idx2nt32B8aXT9A26Gky6xAgAA',
+			'H4sIAAAAAAAAAH1STWsbMRD9Lzp7QN8fvgXTQiCHQKCXOoeRNLIX4l2zWqcF4__e2aQE0kIOEmhm3ps3b3QVnXAuxyfqfZjG-yq2ovNbam1lQJWzbDZbn1pJoZTQsqFAUoqNwNofsC8_BvpF9WHoyzAe3vAtNB9UzeBKRTAhISTbCJJxTVfbivTtHb-bxn45Uf32e6F5xJe7NXQZF7GVG3Ge6XWYLv0RD_RB38X2p1CoY1aqQtJOg5GUILkYIacYyRiriqncoGjZKiVOIhEYlxTExrKUrtpRsCpGy2W6OG2KsdBYNMvNCjBVCTXznNZaJy2uclsxxfsGHhs3tSYAqiBBe7RSKr7d6kqWiXTSBUK1Fgx6B6iZ3MTSkmEqmdfhSRcdfPbgIq7aWH3UNUFNRVJQTgdnxfNGNKL6tODMlmjJphynE62xHZYj3S902l3mPs1vhv2f-_Bymg84DuW9mD283jaiH4fzeTV1ZPP7mQ9_gE8Vn1C82Ov-72-5awzZ8yr2QgVljFfSWaPUXjzfxJfMX7EE6ZJXwfzD8h3H6cJjNHzpdPsDSGDUprECAAA',
+			'H4sIAAAAAAAAAH1Sy27jIBT9F9ZBAi4Pk12UeahSF5UizWbSxQUuiSXHtowzD0X598FJZ9SOqi5YAOfFuVxYIZzicUeltEP_kNialboXSmnhUIYgsg7a-hy9i9HlAORICLZimMqOuo6mTSrb81SGqXLlU9094YFeTm6wz79mmnrsXgO_DsOho09tGTv8vVmkbgHuhEcs87eWflJ6bMvc9odbruyydTIFbmJCDs4j9zoT92CySjpHYfOdvx36cj5Rem08nPuZreWKjRP9aIfzLeU_-cLW35kSGhTEwK2EhgNoxVEb5CEKzJrAe9VUA-WRvIhYYY3h4BvNg_SaNzbLQFpHZ5Z-jLDQpBB5MsZxsCLyxljJiUzKgE1QpJe4kCSCddxGE6saymraABc5RvDWIilZYV7Ut1tXYyVVTSNU06wzRwNGGQo26VRhJFFIZxJXMUsORhNvgCLPRvmgYhIpGfa8Ypko7WaclkqEWLHjcKLlbIvxSA8znf4O6t27e5f1apgO2LfxDq4dXq4rVo7tOC6l9rX8MtZV5_oG8YZVB3vZv_zCTa6UfR3FnkknAayVymoFe_Z8ZR8qf6TihBW1Cfufyhfsh3N9Rsau0PUP1feNMwkDAAA',
+		];
 		const selectedCategories: string[] = uniqueCategories.slice(0, 3);
 
 		const payloads = [
@@ -48,11 +56,7 @@ export const thirdPartyHomeReload = async (req: NextApiRequest, res: NextApiResp
 						{ key: 'limit', value: '50' },
 						{ key: 'searchSessionId', value: '52c93fc1-58fb-4545-83ad-59dd8bb18a62' },
 						{ key: 'cid', value: selectedCategories[0] }, //bathroom
-						{
-							key: 'page_cursor',
-							value:
-								'H4sIAAAAAAAAAG2RTYvCMBCG_0vOLTQ2NcabuB8IHgRhL1sPMZm0gZqUTLsfiP9909bdVfCQw8y87zvPkDNBkEHVe0C03m00WRKMtVgwzgXLBD9SpqReUGYWOaiZ5tSoHEhCpMY9NA2ElcZ1H9CH6KW7WO1kBdfOKHv-6iA42dwKX72vGniy2DbyezVEjQCTYSuxe7PwCXprsbOuGrkMN3NO9TEtlJZpzoVMBTOQirwwM82MyuZm8q-9w_4E-nax711HljQhbYAP6_uR8i8eyfL9kBADoPedDIMyyxJS-xMMvbVUNWw6OP3yP5xNK-LIh0o6qyZxjD5fEoK1bdthl4tM2MYXz71T3Lnivefy-jkrEy1lJCwJ5TTPC8HYrGBFSQ4X8p_8Ip3vI4CRDcLlBwuT4d3aAQAA',
-						},
+						{ key: 'page_cursor', value: pageCursor[Math.floor(Math.random() * (pageCursor.length + 1))] },
 					],
 				},
 				query:
@@ -70,11 +74,7 @@ export const thirdPartyHomeReload = async (req: NextApiRequest, res: NextApiResp
 						{ key: 'limit', value: '50' },
 						{ key: 'searchSessionId', value: '52c93fc1-58fb-4545-83ad-59dd8bb18a62' },
 						{ key: 'cid', value: selectedCategories[1] }, //home decor needs
-						{
-							key: 'page_cursor',
-							value:
-								'H4sIAAAAAAAAAG2RTYvCMBCG_0vOLTQ2NcabuB8IHgRhL1sPMZm0gZqUTLsfiP9909bdVfCQw8y87zvPkDNBkEHVe0C03m00WRKMtVgwzgXLBD9SpqReUGYWOaiZ5tSoHEhCpMY9NA2ElcZ1H9CH6KW7WO1kBdfOKHv-6iA42dwKX72vGniy2DbyezVEjQCTYSuxe7PwCXprsbOuGrkMN3NO9TEtlJZpzoVMBTOQirwwM82MyuZm8q-9w_4E-nax711HljQhbYAP6_uR8i8eyfL9kBADoPedDIMyyxJS-xMMvbVUNWw6OP3yP5xNK-LIh0o6qyZxjD5fEoK1bdthl4tM2MYXz71T3Lnivefy-jkrEy1lJCwJ5TTPC8HYrGBFSQ4X8p_8Ip3vI4CRDcLlBwuT4d3aAQAA',
-						},
+						{ key: 'page_cursor', value: pageCursor[Math.floor(Math.random() * (pageCursor.length + 1))] },
 					],
 				},
 				query:
@@ -92,11 +92,7 @@ export const thirdPartyHomeReload = async (req: NextApiRequest, res: NextApiResp
 						{ key: 'limit', value: '50' },
 						{ key: 'searchSessionId', value: '52c93fc1-58fb-4545-83ad-59dd8bb18a62' },
 						{ key: 'cid', value: selectedCategories[2] }, //all clothing
-						{
-							key: 'page_cursor',
-							value:
-								'H4sIAAAAAAAAAG2RTYvCMBCG_0vOLTQ2NcabuB8IHgRhL1sPMZm0gZqUTLsfiP9909bdVfCQw8y87zvPkDNBkEHVe0C03m00WRKMtVgwzgXLBD9SpqReUGYWOaiZ5tSoHEhCpMY9NA2ElcZ1H9CH6KW7WO1kBdfOKHv-6iA42dwKX72vGniy2DbyezVEjQCTYSuxe7PwCXprsbOuGrkMN3NO9TEtlJZpzoVMBTOQirwwM82MyuZm8q-9w_4E-nax711HljQhbYAP6_uR8i8eyfL9kBADoPedDIMyyxJS-xMMvbVUNWw6OP3yP5xNK-LIh0o6qyZxjD5fEoK1bdthl4tM2MYXz71T3Lnivefy-jkrEy1lJCwJ5TTPC8HYrGBFSQ4X8p_8Ip3vI4CRDcLlBwuT4d3aAQAA',
-						},
+						{ key: 'page_cursor', value: pageCursor[Math.floor(Math.random() * (pageCursor.length + 1))] },
 					],
 				},
 				query:
