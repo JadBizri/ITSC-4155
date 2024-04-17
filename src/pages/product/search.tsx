@@ -48,7 +48,7 @@ interface ModularFeedResponse {
 }
 export default function Search() {
 	const { query } = useRouter();
-	//const originalItems = api.item.getItemMatchList.useQuery(query.q as string);
+	const originalItems = api.item.getItemMatchList.useQuery(query.q as string);
 	const [looseTileItems, setLooseTileItems] = useState<ItemProps[]>([]);
 
 	useEffect(() => {
@@ -61,7 +61,7 @@ export default function Search() {
 				});
 				const { data } = response;
 				setLooseTileItems(
-					data.data.modularFeed.looseTiles.map(tile => ({
+					data.data.modularFeed.looseTiles.slice(0, 50).map(tile => ({
 						id: parseInt(tile.listing.listingId),
 						title: tile.listing.title,
 						slug: 'https://offerup.com/item/detail/' + tile.listing.listingId,
@@ -89,14 +89,14 @@ export default function Search() {
 		}
 	}, [query.q]);
 
-	//const combinedItems = [...(originalItems.data || []), ...looseTileItems];
+	const combinedItems = [...(originalItems.data || []), ...looseTileItems];
 	return (
 		<div className="relative flex min-h-screen flex-col bg-white dark:bg-zinc-950">
 			<SiteHeader />
 			<div className="flex gap-10">
 				<SiteSideBar />
 				<div className="flex flex-wrap gap-7">
-					{looseTileItems.map(item => (
+					{combinedItems.map(item => (
 						<Item key={item.id} {...item} />
 					))}
 				</div>
