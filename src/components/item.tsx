@@ -15,9 +15,9 @@ export function Item({ title, images, price, institution, slug }: Item) {
 						className="rounded-md object-cover"
 					/>
 				</AspectRatio>
-				<h1 className="mt-1 font-semibold text-zinc-950 dark:text-white">${price}</h1>
-				<p className="truncate text-zinc-950 dark:text-white">{title}</p>
-				<h1 className="text-zinc-950/50 dark:text-white/50">{institution}</h1>
+				<h4 className="mt-2 font-semibold leading-none text-zinc-950 dark:text-white">${price}</h4>
+				<p className="truncate leading-7 text-zinc-950 dark:text-white">{title}</p>
+				<small className="text-sm font-medium leading-none text-zinc-950/50 dark:text-white/50">{institution}</small>
 			</Link>
 		</div>
 	);
