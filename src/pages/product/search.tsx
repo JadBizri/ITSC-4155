@@ -85,11 +85,11 @@ export default function Search() {
 		};
 
 		if (query.q) {
-			fetchLooseTiles();
+			void fetchLooseTiles();
 		}
 	}, [query.q]);
 
-	const combinedItems = [...(originalItems.data || []), ...looseTileItems];
+	const combinedItems = [...(originalItems.data ?? []), ...looseTileItems];
 	return (
 		<div className="relative flex min-h-screen flex-col bg-white dark:bg-zinc-950">
 			<SiteHeader />
