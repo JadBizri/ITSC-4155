@@ -32,10 +32,6 @@ const config = {
 				protocol: 'https',
 				hostname: 'api.escuelajs.co',
 			},
-			{
-				protocol: 'https',
-				hostname: 'images.offerup.com',
-			},
 		],
 	},
 };
