@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Item } from '~/components/item';
 import { SiteHeader } from '~/components/site-header';
 import { SiteSideBar } from '~/components/site-side-bar';
+import { api } from '~/utils/api';
 import { $Enums } from '@prisma/client';
 interface Tile {
 	listing: {
@@ -44,7 +45,7 @@ interface ModularFeedResponse {
 }
 export default function Search() {
 	const { query } = useRouter();
-	const originalItems = null; //api.item.getItemMatchList.useQuery(query.q as string);
+	const originalItems = api.item.getItemMatchList.useQuery(query.q as string);
 	const [looseTileItems, setLooseTileItems] = useState<ItemProps[]>([]);
 
 	useEffect(() => {
@@ -85,7 +86,7 @@ export default function Search() {
 	}, [query.q]);
 
 	// Merge results from both API calls for rendering
-	const combinedItems = [[], ...looseTileItems];
+	const combinedItems = [...(originalItems.data || []), ...looseTileItems];
 
 	return (
 		<div className="relative flex min-h-screen flex-col bg-white dark:bg-zinc-950">
@@ -93,7 +94,7 @@ export default function Search() {
 			<div className="flex gap-10">
 				<SiteSideBar />
 				<div className="flex flex-wrap gap-7">
-					{looseTileItems.map(item => (
+					{combinedItems.map(item => (
 						<Item key={item.id} {...item} />
 					))}
 				</div>
