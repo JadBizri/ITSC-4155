@@ -4,12 +4,9 @@ import type { Item } from '@prisma/client';
 import Link from 'next/link';
 
 export function Item({ title, images, price, institution, slug }: Item) {
-	if (!slug.startsWith('https')) {
-		slug = '/product/' + slug;
-	}
 	return (
 		<div className="flex max-w-64 flex-col">
-			<Link className="flex w-64 flex-col" href={`${slug}`}>
+			<Link className="flex w-64 flex-col" href={`/product/${slug}`}>
 				<AspectRatio ratio={1 / 1} className="bg-muted">
 					<Image
 						src={images[0] ?? 'https://i.imgur.com/G4f21Ai.jpeg'}
