@@ -6,7 +6,7 @@ interface SearchRequest {
 	zipcode: string;
 }
 
-const thirdParty = async (req: NextApiRequest, res: NextApiResponse) => {
+export const thirdParty = async (req: NextApiRequest, res: NextApiResponse) => {
 	try {
 		const { searchQuery, zipcode } = req.body as SearchRequest;
 
