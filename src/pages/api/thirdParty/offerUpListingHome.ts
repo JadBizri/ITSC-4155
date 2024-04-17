@@ -20,7 +20,7 @@ export const thirdPartyHome = async (req: NextApiRequest, res: NextApiResponse) 
 						{ key: 'platform', value: 'web_mobile' },
 						{ key: 'zipcode', value: zipcode },
 						{ key: 'experiment_id', value: 'experimentmodel24' },
-						{ key: 'limit', value: '50' },
+						{ key: 'limit', value: '13' },
 						{ key: 'searchSessionId', value: '52c93fc1-58fb-4545-83ad-59dd8bb18a62' },
 						{ key: 'cid', value: '12.10' }, //office supplies
 						// {key: "cid", value: "1.7"}//books, movies, entertainment
@@ -40,7 +40,7 @@ export const thirdPartyHome = async (req: NextApiRequest, res: NextApiResponse) 
 						{ key: 'platform', value: 'web_mobile' },
 						{ key: 'zipcode', value: zipcode },
 						{ key: 'experiment_id', value: 'experimentmodel24' },
-						{ key: 'limit', value: '50' },
+						{ key: 'limit', value: '13' },
 						{ key: 'searchSessionId', value: '52c93fc1-58fb-4545-83ad-59dd8bb18a62' },
 						// {key: "cid", value: "12.10"}//office supplies
 						// {key: "cid", value: "1.7"}//books, movies, entertainment
@@ -60,7 +60,7 @@ export const thirdPartyHome = async (req: NextApiRequest, res: NextApiResponse) 
 						{ key: 'platform', value: 'web_mobile' },
 						{ key: 'zipcode', value: zipcode },
 						{ key: 'experiment_id', value: 'experimentmodel24' },
-						{ key: 'limit', value: '100' },
+						{ key: 'limit', value: '13' },
 						{ key: 'searchSessionId', value: '52c93fc1-58fb-4545-83ad-59dd8bb18a62' },
 						//{key: "cid", value: "12.10"}//office supplies
 						// {key: "cid", value: "1.7"}//books, movies, entertainment

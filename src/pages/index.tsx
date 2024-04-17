@@ -10,6 +10,7 @@ import { SiteSideBar } from '~/components/site-side-bar';
 import { Footer } from '~/components/footer';
 import { chunk } from '~/lib/utils';
 import { $Enums } from '@prisma/client';
+import { toNum } from '~/lib/utils';
 
 interface Tile {
 	listing: {
@@ -49,15 +50,14 @@ interface ModularFeedResponse {
 }
 export default function Home() {
 	// const originalItems = api.item.itemList.useQuery();
-	// const { ref, width } = useResizeObserver<HTMLDivElement>();
+	const { ref, width } = useResizeObserver<HTMLDivElement>();
 	// if (originalItems.isLoading) return <div>Loading...</div>;
 	// if (originalItems.isError) return <div>Error: {originalItems.error.message}</div>;
 	// if (!originalItems.data) return <div>No data</div>;
 
-	// const raw = Math.floor(width! / 256) - 1;
-	// const itemsPerRow = raw === 0 ? 1 : raw;
-	// console.log(width);
-	// const rows = chunk(originalItems.data, itemsPerRow);
+	const raw = Math.floor(width! / 256) - 1;
+	const itemsPerRow = raw === 0 ? 1 : raw;
+	console.log(width);
 
 	const [looseTileItems, setLooseTileItems] = useState<ItemProps[]>([]);
 
@@ -68,13 +68,13 @@ export default function Home() {
 					zipcode: '28213',
 					category: null,
 				});
-				console.log(response);
+				//console.log(response);
 				const { data } = response;
 				for (let i = 0; i < 3; i++) {
 					const tiles = response.data[i]?.data.modularFeed.looseTiles;
 					if (tiles != null) {
 						const items = tiles.map(tile => ({
-							id: parseInt(tile.listing.listingId),
+							id: toNum(tile.listing.listingId),
 							title: tile.listing.title,
 							slug: 'https://offerup.com/item/detail/' + tile.listing.listingId,
 							category: 'OTHER' as $Enums.Category,
@@ -99,6 +99,9 @@ export default function Home() {
 		};
 		fetchLooseTiles();
 	});
+
+	//const combinedItems = [...(originalItems.data || []), ...looseTileItems];
+	const rows = chunk(looseTileItems, itemsPerRow);
 
 	return (
 		<>
