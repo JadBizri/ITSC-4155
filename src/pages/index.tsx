@@ -1,26 +1,121 @@
 import Head from 'next/head';
 import { Item } from '~/components/item';
+import { useEffect, useState, useRef } from 'react';
+import axios from 'axios';
 
 import { api } from '~/utils/api';
+import useResizeObserver from 'use-resize-observer';
 import { SiteHeader } from '~/components/site-header';
 import { SiteSideBar } from '~/components/site-side-bar';
 import { Footer } from '~/components/footer';
 import { chunk } from '~/lib/utils';
-import useResizeObserver from 'use-resize-observer';
+import { $Enums } from '@prisma/client';
+import { toNum } from '~/lib/utils';
 
+interface Tile {
+	listing: {
+		conditionText: string;
+		listingId: string;
+		image: {
+			url: string;
+		};
+		locationName: string;
+		price: string;
+		title: string;
+	};
+}
+interface ItemProps {
+	id: number;
+	title: string;
+	slug: string;
+	category: $Enums.Category;
+	price: number;
+	description: string;
+	images: string[];
+	location: string;
+	institution: string;
+	condition: string;
+	createdAt: Date;
+	updatedAt: Date;
+	visits: number;
+	UniqueVisits: number;
+	createdById: string;
+}
+interface ModularFeedResponse {
+	data: {
+		modularFeed: {
+			looseTiles: Tile[];
+		};
+	};
+}
 export default function Home() {
-	const items = api.item.itemList.useQuery();
+	const originalItems = api.item.itemList.useQuery();
 	const { ref, width } = useResizeObserver<HTMLDivElement>();
-
-	if (items.isLoading) return <div>Loading...</div>;
-	if (items.isError) return <div>Error: {items.error.message}</div>;
-	if (!items.data) return <div>No data</div>;
-
 	const raw = Math.floor(width! / 256) - 1;
 	const itemsPerRow = raw === 0 ? 1 : raw;
 	console.log(width);
-	const rows = chunk(items.data, itemsPerRow);
 
+	const [looseTileItems, setLooseTileItems] = useState<ItemProps[]>([]);
+	const [looseTileItemsRefresh, setLooseTileItemsRefresh] = useState<ItemProps[]>([]);
+	const fetchingRef = useRef(false);
+
+	useEffect(() => {
+		const fetchLooseTiles = async (endpoint: string) => {
+			if (fetchingRef.current) return;
+			fetchingRef.current = true;
+			try {
+				const response = await axios.post<ModularFeedResponse[]>(endpoint, {
+					//'/api/thirdParty/offerUpListingHome'
+					zipcode: '28213',
+					category: null,
+				});
+				//console.log(response);
+				const newItems = response.data.flatMap(res =>
+					res.data.modularFeed.looseTiles.slice(0, 50).map(tile => ({
+						id: toNum(tile.listing.listingId),
+						title: tile.listing.title,
+						slug: 'https://offerup.com/item/detail/' + tile.listing.listingId,
+						category: 'OTHER' as $Enums.Category,
+						price: parseFloat(tile.listing.price),
+						description: 'Description not available',
+						images: [tile.listing.image.url],
+						location: tile.listing.locationName,
+						institution: 'OfferUp',
+						condition: 'Description not available',
+						createdAt: new Date(),
+						updatedAt: new Date(),
+						visits: 0,
+						UniqueVisits: 0,
+						createdById: 'default-user',
+					})),
+				);
+				setLooseTileItems(prev => [...prev, ...newItems]);
+			} catch (error) {
+				console.error('Failed to fetch loose tiles:', error);
+			} finally {
+				fetchingRef.current = false;
+			}
+		};
+
+		void fetchLooseTiles('/api/thirdParty/offerUpListingHome');
+
+		const handleScroll = () => {
+			const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 300;
+			if (nearBottom) {
+				void fetchLooseTiles('/api/thirdParty/offerUpListingHomeRefresh');
+			}
+		};
+
+		window.addEventListener('scroll', handleScroll);
+		return () => window.removeEventListener('scroll', handleScroll);
+	}, []);
+
+	if (originalItems.isLoading) return <div>Loading...</div>;
+	if (originalItems.isError) return <div>Error: {originalItems.error.message}</div>;
+	if (!originalItems.data) return <div>No data</div>;
+
+	const combinedItems = [...(originalItems.data || []), ...looseTileItems];
+	const rows = chunk(combinedItems, itemsPerRow);
 	return (
 		<>
 			<Head>
@@ -39,10 +134,18 @@ export default function Home() {
 									{row.map(item => (
 										<Item key={item.id} {...item} />
 									))}
+									{looseTileItems.map(item => (
+										<Item key={item.id} {...item} />
+									))}
 								</div>
 							))}
 						</div>
 					</div>
+					{/* <div className="flex flex-wrap gap-7">
+						{looseTileItems.map(item => (
+							<Item key={item.id} {...item} />
+						))}
+					</div> */}
 				</div>
 				<Footer />
 			</div>
