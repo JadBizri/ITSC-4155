@@ -9,12 +9,14 @@ import { api } from '~/utils/api';
 import { $Enums } from '@prisma/client';
 interface Tile {
 	listing: {
+		conditionText: string;
 		listingId: string;
-		title: string;
 		image: {
 			url: string;
 		};
+		locationName: string;
 		price: string;
+		title: string;
 	};
 }
 interface ItemProps {
@@ -45,13 +47,13 @@ interface ModularFeedResponse {
 }
 export default function Search() {
 	const { query } = useRouter();
-	const originalItems = api.item.getItemMatchList.useQuery(query.q as string);
+	//const originalItems = api.item.getItemMatchList.useQuery(query.q as string);
 	const [looseTileItems, setLooseTileItems] = useState<ItemProps[]>([]);
 
 	useEffect(() => {
 		const fetchLooseTiles = async () => {
 			try {
-				const response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingAPI', {
+				const response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingSearch', {
 					searchQuery: query.q,
 					zipcode: '28213',
 				});
@@ -60,14 +62,14 @@ export default function Search() {
 					data.data.modularFeed.looseTiles.map(tile => ({
 						id: parseInt(tile.listing.listingId),
 						title: tile.listing.title,
-						slug: 'some-slug', // Assume slug is derived or default
+						slug: 'https://offerup.com/item/detail/' + tile.listing.listingId,
 						category: 'OTHER',
 						price: parseFloat(tile.listing.price),
 						description: 'Description not available',
 						images: [tile.listing.image.url],
-						location: 'Default Location',
-						institution: 'Default Institution',
-						condition: 'New',
+						location: tile.listing.locationName,
+						institution: 'OfferUp',
+						condition: 'Description not available',
 						createdAt: new Date(),
 						updatedAt: new Date(),
 						visits: 0,
@@ -85,16 +87,14 @@ export default function Search() {
 		}
 	}, [query.q]);
 
-	// Merge results from both API calls for rendering
-	const combinedItems = [...(originalItems.data || []), ...looseTileItems];
-
+	//const combinedItems = [...(originalItems.data || []), ...looseTileItems];
 	return (
 		<div className="relative flex min-h-screen flex-col bg-white dark:bg-zinc-950">
 			<SiteHeader />
 			<div className="flex gap-10">
 				<SiteSideBar />
 				<div className="flex flex-wrap gap-7">
-					{combinedItems.map(item => (
+					{looseTileItems.map(item => (
 						<Item key={item.id} {...item} />
 					))}
 				</div>
