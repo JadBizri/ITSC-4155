@@ -21,10 +21,16 @@ export function Item({ title, images, price, institution, slug }: Item) {
 				</AspectRatio>
 				<h4 className="mt-2 font-semibold leading-none text-zinc-950 dark:text-white">${price}</h4>
 				<p className="truncate leading-7 text-zinc-950 dark:text-white">{title}</p>
-				<div className="mt-1 flex">
+				{slug.startsWith('https') ? (
+					<div className="mt-1 flex">
+						<small className="text-sm font-medium leading-none text-zinc-950/50 dark:text-white/50">
+							{institution}
+						</small>
+						<img className="-mt-1" src="/icon_external.svg" alt="" height={20} width={20} />
+					</div>
+				) : (
 					<small className="text-sm font-medium leading-none text-zinc-950/50 dark:text-white/50">{institution}</small>
-					<img className="-mt-1" src="/icon_external.svg" alt="" height={20} width={20} />
-				</div>
+				)}
 			</Link>
 		</div>
 	);
