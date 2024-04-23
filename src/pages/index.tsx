@@ -11,6 +11,7 @@ import { Footer } from '~/components/footer';
 import { chunk } from '~/lib/utils';
 import { $Enums } from '@prisma/client';
 import { toNum } from '~/lib/utils';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
 interface Tile {
 	listing: {
@@ -54,7 +55,6 @@ export default function Home() {
 	const raw = Math.floor(width! / 256) - 1;
 	const itemsPerRow = raw === 0 ? 1 : raw;
 	console.log(width);
-
 	const [looseTileItems, setLooseTileItems] = useState<ItemProps[]>([]);
 	const [looseTileItemsRefresh, setLooseTileItemsRefresh] = useState<ItemProps[]>([]);
 	const fetchingRef = useRef(false);
@@ -116,6 +116,7 @@ export default function Home() {
 
 	const combinedItems = [...(originalItems.data || []), ...looseTileItems];
 	const rows = chunk(combinedItems, itemsPerRow);
+
 	return (
 		<>
 			<Head>
@@ -134,18 +135,10 @@ export default function Home() {
 									{row.map(item => (
 										<Item key={item.id} {...item} />
 									))}
-									{looseTileItems.map(item => (
-										<Item key={item.id} {...item} />
-									))}
 								</div>
 							))}
 						</div>
 					</div>
-					{/* <div className="flex flex-wrap gap-7">
-						{looseTileItems.map(item => (
-							<Item key={item.id} {...item} />
-						))}
-					</div> */}
 				</div>
 				<Footer />
 			</div>
