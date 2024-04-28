@@ -11,6 +11,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { LogOut, Settings, User } from 'lucide-react';
 import { signOut } from 'next-auth/react';
+import Link from 'next/link';
 
 export function UserNav(sessionData: Session) {
 	return (
@@ -28,7 +29,7 @@ export function UserNav(sessionData: Session) {
 				<DropdownMenuSeparator />
 				<DropdownMenuItem>
 					<User className="mr-4 h-4 w-4" />
-					<span>Profile</span>
+					<Link href="/profile">Profile</Link>
 				</DropdownMenuItem>
 				<DropdownMenuItem>
 					<Settings className="mr-4 h-4 w-4" />
