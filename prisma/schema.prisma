@@ -94,7 +94,7 @@ model Offer {
     price     Float
     buyerId   String
     itemId    Int
-    status    String   @default("PENDING")
+    status    Status   @default(PENDING)
     item      Item     @relation(fields: [itemId], references: [id])
     buyer     User     @relation(fields: [buyerId], references: [id])
 }
@@ -114,4 +114,10 @@ enum Category {
     ESSENTIALS
     FURNITURE
     OTHER
+}
+
+enum Status {
+    PENDING
+    ACCEPTED
+    REJECTED
 }
