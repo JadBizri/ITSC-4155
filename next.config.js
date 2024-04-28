@@ -36,6 +36,10 @@ const config = {
 				protocol: 'https',
 				hostname: 'images.offerup.com',
 			},
+			{
+				protocol: 'https',
+				hostname: 'placeimg.com',
+			},
 		],
 	},
 };
