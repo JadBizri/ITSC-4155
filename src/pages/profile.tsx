@@ -4,18 +4,6 @@ import Head from 'next/head';
 import { ProfileImage } from '~/components/ui/profile-img';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '~/components/ui/card';
 import { Button } from '~/components/ui/button';
-import { IoMdSettings } from 'react-icons/io';
-import { IoLogOutOutline } from 'react-icons/io5';
-import { MdOutlineDarkMode } from 'react-icons/md';
-import { CiShare2 } from 'react-icons/ci';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu';
 import { api } from '~/utils/api';
 
 export default function Profile() {
@@ -37,42 +25,20 @@ export default function Profile() {
 				</Head>
 				<div className="relative flex min-h-screen flex-col bg-white dark:bg-zinc-950">
 					<SiteHeader />
-					<div className="mt-8 flex items-center space-y-10 text-center">
-						<div className="ms-8 flex flex-col">
-							<DropdownMenu open>
-								<DropdownMenuTrigger>
-									<ProfileImage imageUrl={sessionData?.user.image ?? ''} size="200px" />
-								</DropdownMenuTrigger>
-								<DropdownMenuContent className="mt-4">
-									<DropdownMenuLabel>My Account</DropdownMenuLabel>
-									<DropdownMenuSeparator />
-									<DropdownMenuItem>
-										<IoMdSettings className="me-1" />
-										Settings
-									</DropdownMenuItem>
-									<DropdownMenuSeparator />
-									<DropdownMenuItem>
-										<CiShare2 className="me-1" />
-										Share With Friends
-									</DropdownMenuItem>
-									<DropdownMenuSeparator />
-									<DropdownMenuItem>
-										<IoLogOutOutline className="me-1" />
-										Log Out
-									</DropdownMenuItem>
-									<DropdownMenuItem>
-										<MdOutlineDarkMode className="me-1" />
-										Dark Mode
-									</DropdownMenuItem>
-								</DropdownMenuContent>
-							</DropdownMenu>
+					<div className="mt-8 flex flex-col items-center space-y-10 text-center">
+						<div className="ms-8 flex items-center">
+							{sessionData.user.image && <ProfileImage imageUrl={sessionData.user.image} size="100px" />}
+							<div className="ms-3 flex flex-col">
+								<h1 className="mb-3 text-4xl">Welcome, {sessionData.user.name}</h1>
+								<Button variant="destructive">Delete Account</Button>
+							</div>
 						</div>
-						<div className="ms-10 flex">
+						<div className="m-10 flex">
 							{items.data?.length === 0 ? (
 								<h1 className="text-4xl">You currently do not have any active listings</h1>
 							) : (
 								<div>
-									{' '}
+									<h1 className="mb-3 text-4xl">Your Listings</h1>
 									{items.data?.map(item => (
 										<Card key={item.id}>
 											<CardHeader>
@@ -86,7 +52,7 @@ export default function Profile() {
 												<Button variant="destructive">Delete</Button>
 											</CardFooter>
 										</Card>
-									))}{' '}
+									))}
 								</div>
 							)}
 						</div>
