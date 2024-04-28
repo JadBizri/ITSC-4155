@@ -5,6 +5,8 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { api } from '~/utils/api';
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
 
 export default function ProductPage() {
 	const { query } = useRouter();
@@ -28,6 +30,12 @@ export default function ProductPage() {
 				</Carousel>
 				<div>
 					<h1 className="scroll-m-20 text-4xl font-bold tracking-tight lg:text-5xl">{item.data?.title}</h1>
+					<div className="mt-3 flex items-center">
+						<Input type="number" name="offer" placeholder="0" className="w-1/4" min={0} step={0.01} />
+						<Button variant="secondary" className="ms-3">
+							Make an Offer
+						</Button>
+					</div>
 					<p className="leading-7 [&:not(:first-child)]:mt-6">${item.data?.price}</p>
 					<Accordion type="multiple" defaultValue={['description']} className="w-full">
 						<AccordionItem value="description" datatype="open">
