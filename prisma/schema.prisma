@@ -94,7 +94,7 @@ model Offer {
     price     Float
     buyerId   String
     itemId    Int
-    status    String
+    status    String   @default("PENDING")
     item      Item     @relation(fields: [itemId], references: [id])
     buyer     User     @relation(fields: [buyerId], references: [id])
 }
