@@ -38,7 +38,7 @@ export const itemRouter = createTRPCRouter({
 		}),
 
 	getItemSlug: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
-		return ctx.db.item.findFirst({ where: { slug: input } });
+		return ctx.db.item.findFirst({ where: { slug: input }, include: { offers: true, createdBy: true } });
 	}),
 
 	getItemMatchList: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
