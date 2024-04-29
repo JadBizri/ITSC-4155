@@ -2,22 +2,13 @@ import { useSession } from 'next-auth/react';
 import { SiteHeader } from '~/components/site-header';
 import Head from 'next/head';
 import { ProfileImage } from '~/components/ui/profile-img';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '~/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
 import { Button } from '~/components/ui/button';
 import { api } from '~/utils/api';
 import { Item } from '~/components/item';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import Link from 'next/link';
-import {
-	Table,
-	TableBody,
-	TableCaption,
-	TableCell,
-	TableFooter,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '~/components/ui/table';
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table';
 
 export default function Profile() {
 	const { data: sessionData } = useSession();
