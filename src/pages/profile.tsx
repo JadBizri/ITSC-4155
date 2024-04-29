@@ -68,7 +68,7 @@ export default function Profile() {
 																<Link /* MUST ADD LINK TO EDIT ITEM PAGE HERE */ href={'#'}>
 																	<Button variant="secondary">Edit</Button>
 																</Link>
-																<Link href={'#'}>
+																<Link href={'/offer/' + item.slug}>
 																	<Button variant="secondary">View Offers</Button>
 																</Link>
 																<Button variant="destructive">Delete</Button>
@@ -110,7 +110,7 @@ export default function Profile() {
 																		<Button variant={'link'}>{offer.item.title}</Button>
 																	</Link>
 																</TableCell>
-																<TableCell>{offer.price}</TableCell>
+																<TableCell>${(Math.round(offer.price * 100) / 100).toFixed(2)}</TableCell>
 																<TableCell>{offer.status}</TableCell>
 															</TableRow>
 														))}
