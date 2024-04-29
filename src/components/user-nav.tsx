@@ -25,15 +25,19 @@ export function UserNav(sessionData: Session) {
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
-				<DropdownMenuLabel>My Account</DropdownMenuLabel>
+				<DropdownMenuLabel className="text-center">My Account</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem>
-					<User className="mr-4 h-4 w-4" />
-					<Link href="/profile">Profile</Link>
+					<Link className="inline-flex items-center" href="/profile">
+						<User className="mr-4 h-4 w-4" />
+						Profile
+					</Link>
 				</DropdownMenuItem>
 				<DropdownMenuItem>
-					<Settings className="mr-4 h-4 w-4" />
-					<span>Settings</span>
+					<Link className="inline-flex items-center" href="#">
+						<Settings className="mr-4 h-4 w-4" />
+						Settings
+					</Link>
 				</DropdownMenuItem>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem onClick={() => void signOut()} className="cursor-pointer">
