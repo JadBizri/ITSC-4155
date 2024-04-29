@@ -11,6 +11,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { LogOut, Settings, User } from 'lucide-react';
 import { signOut } from 'next-auth/react';
+import Link from 'next/link';
 
 export function UserNav(sessionData: Session) {
 	return (
@@ -24,15 +25,19 @@ export function UserNav(sessionData: Session) {
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
-				<DropdownMenuLabel>My Account</DropdownMenuLabel>
+				<DropdownMenuLabel className="text-center">My Account</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem>
-					<User className="mr-4 h-4 w-4" />
-					<span>Profile</span>
+					<Link className="inline-flex items-center" href="/profile">
+						<User className="mr-4 h-4 w-4" />
+						Profile
+					</Link>
 				</DropdownMenuItem>
 				<DropdownMenuItem>
-					<Settings className="mr-4 h-4 w-4" />
-					<span>Settings</span>
+					<Link className="inline-flex items-center" href="#">
+						<Settings className="mr-4 h-4 w-4" />
+						Settings
+					</Link>
 				</DropdownMenuItem>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem onClick={() => void signOut()} className="cursor-pointer">

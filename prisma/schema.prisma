@@ -29,10 +29,12 @@ model Item {
     updatedAt    DateTime @updatedAt
     visits       Int      @default(0)
     UniqueVisits Int      @default(0)
+    Active       Boolean  @default(true)
 
     createdBy   User       @relation(fields: [createdById], references: [id])
     createdById String
     Comments    Comments[]
+    offers      Offer[]
 
     @@index([title])
 }
@@ -85,6 +87,17 @@ model User {
     sessions      Session[]
     items         Item[]
     Comments      Comments[]
+    offers        Offer[]
+}
+
+model Offer {
+    id        Int      @id @default(autoincrement())
+    price     Float
+    buyerId   String
+    itemId    Int
+    status    Status   @default(PENDING)
+    item      Item     @relation(fields: [itemId], references: [id])
+    buyer     User     @relation(fields: [buyerId], references: [id])
 }
 
 model VerificationToken {
@@ -102,4 +115,10 @@ enum Category {
     ESSENTIALS
     FURNITURE
     OTHER
+}
+
+enum Status {
+    PENDING
+    ACCEPTED
+    REJECTED
 }
