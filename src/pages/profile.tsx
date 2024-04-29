@@ -8,10 +8,22 @@ import { api } from '~/utils/api';
 import { Item } from '~/components/item';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import Link from 'next/link';
+import {
+	Table,
+	TableBody,
+	TableCaption,
+	TableCell,
+	TableFooter,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from '~/components/ui/table';
 
 export default function Profile() {
 	const { data: sessionData } = useSession();
 	const items = api.item.getUserItems.useQuery();
+	const userOffers = api.offer.getUserOffers.useQuery();
+
 	if (!sessionData) {
 		return (
 			<div className="flex min-h-screen items-center justify-center bg-white dark:bg-zinc-950">
@@ -38,7 +50,7 @@ export default function Profile() {
 								</Button>
 							</div>
 						</div>
-						<div className="m-10 flex">
+						<div className="m-10 flex w-[80%]">
 							<Tabs defaultValue="listings" className="m-auto w-[80%]">
 								<TabsList className="grid w-full grid-cols-2">
 									<TabsTrigger className="px-10" value="listings">
@@ -65,6 +77,9 @@ export default function Profile() {
 																<Link /* MUST ADD LINK TO EDIT ITEM PAGE HERE */ href={'#'}>
 																	<Button variant="secondary">Edit</Button>
 																</Link>
+																<Link href={'#'}>
+																	<Button variant="secondary">View Offers</Button>
+																</Link>
 																<Button variant="destructive">Delete</Button>
 															</div>
 														</div>
@@ -74,13 +89,43 @@ export default function Profile() {
 										</CardContent>
 									</Card>
 								</TabsContent>
-								<TabsContent value="offers" className="w-[100%]">
+								<TabsContent value="offers">
 									<Card>
 										<CardHeader>
 											<CardTitle>My Offers</CardTitle>
 										</CardHeader>
 										<CardContent className="space-y-2">
-											<h1>LIST OF OFFERS</h1>
+											{userOffers.data?.length === 0 ? (
+												<h1 className="text-4xl">You have not made any offers yet</h1>
+											) : (
+												<Table>
+													{userOffers.data?.length === 1 ? (
+														<TableCaption>You have made a total of 1 offer.</TableCaption>
+													) : (
+														<TableCaption>You have made a total of {userOffers.data?.length} offers.</TableCaption>
+													)}
+													<TableHeader>
+														<TableRow>
+															<TableHead className="text-l">Item</TableHead>
+															<TableHead className="text-center">Amount</TableHead>
+															<TableHead className="text-center">Status</TableHead>
+														</TableRow>
+													</TableHeader>
+													<TableBody>
+														{userOffers.data?.map(offer => (
+															<TableRow key={offer.itemId}>
+																<TableCell className="text-left">
+																	<Link href={'/product/' + offer.item.slug}>
+																		<Button variant={'link'}>{offer.item.title}</Button>
+																	</Link>
+																</TableCell>
+																<TableCell>{offer.price}</TableCell>
+																<TableCell>{offer.status}</TableCell>
+															</TableRow>
+														))}
+													</TableBody>
+												</Table>
+											)}
 										</CardContent>
 									</Card>
 								</TabsContent>
