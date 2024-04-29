@@ -102,7 +102,7 @@ export default function Search() {
 			}
 		};
 
-		if (query.q || query.c) {
+		if (query.q ?? query.c) {
 			void fetchLooseTiles();
 		}
 		const handleScroll = () => {
