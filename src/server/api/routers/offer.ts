@@ -24,6 +24,10 @@ export const offerRouter = createTRPCRouter({
 		}),
 
 	getUserOffers: protectedProcedure.query(async ({ ctx }) => {
-		return ctx.db.offer.findMany({ where: { buyer: { id: ctx.session.user.id } } });
+		//populate the user of the offer
+		return ctx.db.offer.findMany({
+			where: { buyerId: ctx.session.user.id },
+			include: { item: true },
+		});
 	}),
 });
