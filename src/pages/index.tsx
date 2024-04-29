@@ -15,7 +15,7 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import type { ModularFeedResponse } from '~/lib/types';
 
 export default function Home() {
-	const originalItems = null; //api.item.itemList.useQuery();
+	const originalItems = api.item.itemList.useQuery();
 	const [width, setWidth] = useState<number>(0);
 	const { ref, width: _width } = useResizeObserver<HTMLDivElement>({
 		onResize: ({ width }) => {
@@ -87,12 +87,12 @@ export default function Home() {
 		return () => window.removeEventListener('scroll', handleScroll);
 	}, []);
 
-	// if (originalItems.isLoading) return <div>Loading...</div>;
-	// if (originalItems.isError) return <div>Error: {originalItems.error.message}</div>;
-	// if (!originalItems.data) return <div>No data</div>;
+	if (originalItems.isLoading) return <div>Loading...</div>;
+	if (originalItems.isError) return <div>Error: {originalItems.error.message}</div>;
+	if (!originalItems.data) return <div>No data</div>;
 
-	//const combinedItems = [...(originalItems.data || []), ...looseTileItems];
-	const combinedItems = [...looseTileItems];
+	const combinedItems = [...(originalItems.data || []), ...looseTileItems];
+	// const combinedItems = [...looseTileItems];
 	const rows = chunk(combinedItems, itemsPerRow);
 
 	return (

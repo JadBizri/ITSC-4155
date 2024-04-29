@@ -30,18 +30,17 @@ export default function Search() {
 	}, [_width]);
 	const raw = Math.floor(width / 256) - 1;
 	const itemsPerRow = raw === 0 ? 1 : raw;
-	const originalItems = null;
-	// api.item.getItemMatchList.useQuery({
-	// 	input: query.q as possibleQuery,
-	// 	category: (query.c as possibleCategory)?.toUpperCase() as possibleCategory,
-	// });
+	const originalItems = api.item.getItemMatchList.useQuery({
+		input: query.q as possibleQuery,
+		category: (query.c as possibleCategory)?.toUpperCase() as possibleCategory,
+	});
 	const [looseTileItems, setLooseTileItems] = useState<ItemProp[]>([]);
 	useEffect(() => {
 		const fetchLooseTiles = async () => {
 			try {
 				let response = null;
 				let offerUpCat = 0;
-				if (offerUpCat != 0) {
+				if (query.c) {
 					switch (query.c) {
 						case 'essentials':
 							offerUpCat = 2.2;
@@ -53,23 +52,17 @@ export default function Search() {
 							offerUpCat = 1;
 							break;
 						case 'clothing':
-							offerUpCat = 4;
-							break;
-						default:
-							query.q = query.c?.toString();
+							offerUpCat = 3;
 							break;
 					}
-					console.log(offerUpCat + 'first');
-
 					if (offerUpCat != 0) {
-						console.log(offerUpCat + 'first');
 						response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingCategories', {
 							zipcode: '28213',
-							category: '1', //offerUpCat ?? null,
+							category: offerUpCat, //offerUpCat ?? null,
 						});
 					} else {
 						response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingSearch', {
-							searchQuery: query.q as possibleQuery,
+							searchQuery: query.c as possibleQuery,
 							zipcode: '28213',
 						});
 					}
@@ -109,17 +102,26 @@ export default function Search() {
 			}
 		};
 
-		if (query.q) {
+		if (query.q || query.c) {
 			void fetchLooseTiles();
 		}
-	}, [query.q]);
+		const handleScroll = () => {
+			const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 300;
+			if (nearBottom) {
+				void fetchLooseTiles();
+			}
+		};
 
-	// if (originalItems.isLoading) return <div>Loading...</div>;
-	// if (originalItems.isError) return <div>Error: {originalItems.error.message}</div>;
-	// if (!originalItems.data) return <div>No data</div>;
+		window.addEventListener('scroll', handleScroll);
+		return () => window.removeEventListener('scroll', handleScroll);
+	}, [query.q, query.c]);
 
-	//const combinedItems = [...(originalItems.data || []), ...looseTileItems];
-	const combinedItems = [...looseTileItems];
+	if (originalItems.isLoading) return <div>Loading...</div>;
+	if (originalItems.isError) return <div>Error: {originalItems.error.message}</div>;
+	if (!originalItems.data) return <div>No data</div>;
+
+	const combinedItems = [...(originalItems.data || []), ...looseTileItems];
+	//const combinedItems = [...looseTileItems];
 	const rows = chunk(combinedItems, itemsPerRow);
 	return (
 		<div className="relative flex flex-col">

@@ -1,6 +1,7 @@
 import { Bed, Book, HomeIcon, Lamp, Shirt, Smartphone } from 'lucide-react';
 import Link from 'next/link';
 import { Separator } from './ui/separator';
+import { Input } from './ui/input';
 
 export function SiteSideBar({ query }: { query: string | undefined } = { query: undefined }) {
 	return (
