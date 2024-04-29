@@ -35,15 +35,45 @@ export default function Search() {
 		category: (query.c as possibleCategory)?.toUpperCase() as possibleCategory,
 	});
 	const [looseTileItems, setLooseTileItems] = useState<ItemProp[]>([]);
-
 	useEffect(() => {
 		const fetchLooseTiles = async () => {
 			try {
-				const response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingSearch', {
-					searchQuery: query.q as possibleQuery,
-					zipcode: '28213',
-					category: null,
-				});
+				let response = null;
+				let offerUpCat = 0;
+				if (query.c) {
+					switch (query.c) {
+						case 'essentials':
+							offerUpCat = 2.2;
+							break;
+						case 'furniture':
+							offerUpCat = 2.1;
+							break;
+						case 'electronics':
+							offerUpCat = 1;
+							break;
+						case 'clothing':
+							offerUpCat = 3;
+							break;
+					}
+					if (offerUpCat != 0) {
+						response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingCategories', {
+							zipcode: '28213',
+							category: offerUpCat, //offerUpCat ?? null,
+						});
+					} else {
+						response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingSearch', {
+							searchQuery: query.c as possibleQuery,
+							zipcode: '28213',
+						});
+					}
+					console.log(offerUpCat + 'second');
+				} else {
+					response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingSearch', {
+						searchQuery: query.q as possibleQuery,
+						zipcode: '28213',
+					});
+				}
+				//console.log(response);
 				const { data } = response;
 				setLooseTileItems(
 					data.data.modularFeed.looseTiles.slice(0, 50).map(
@@ -72,16 +102,26 @@ export default function Search() {
 			}
 		};
 
-		if (query.q) {
+		if (query.q ?? query.c) {
 			void fetchLooseTiles();
 		}
-	}, [query.q]);
+		const handleScroll = () => {
+			const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 300;
+			if (nearBottom) {
+				void fetchLooseTiles();
+			}
+		};
+
+		window.addEventListener('scroll', handleScroll);
+		return () => window.removeEventListener('scroll', handleScroll);
+	}, [query.q, query.c]);
 
 	if (originalItems.isLoading) return <div>Loading...</div>;
 	if (originalItems.isError) return <div>Error: {originalItems.error.message}</div>;
 	if (!originalItems.data) return <div>No data</div>;
 
 	const combinedItems = [...(originalItems.data || []), ...looseTileItems];
+	//const combinedItems = [...looseTileItems];
 	const rows = chunk(combinedItems, itemsPerRow);
 	return (
 		<div className="relative flex flex-col">

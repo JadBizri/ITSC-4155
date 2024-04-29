@@ -92,6 +92,7 @@ export default function Home() {
 	if (!originalItems.data) return <div>No data</div>;
 
 	const combinedItems = [...(originalItems.data || []), ...looseTileItems];
+	// const combinedItems = [...looseTileItems];
 	const rows = chunk(combinedItems, itemsPerRow);
 
 	return (
