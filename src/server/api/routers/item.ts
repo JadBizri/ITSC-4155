@@ -41,9 +41,23 @@ export const itemRouter = createTRPCRouter({
 		return ctx.db.item.findFirst({ where: { slug: input } });
 	}),
 
-	getItemMatchList: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
-		return ctx.db.item.findMany({ where: { title: { contains: input, mode: 'insensitive' } } });
-	}),
+	getItemMatchList: publicProcedure
+		.input(
+			z.object({
+				input: z.optional(z.string()),
+				category: z.optional(
+					z.enum(['TEXTBOOKS', 'ELECTRONICS', 'CLOTHING', 'ESSENTIALS', 'FURNITURE', 'OTHER', 'ALL']),
+				),
+			}),
+		)
+		.query(async ({ ctx, input }) => {
+			return ctx.db.item.findMany({
+				where: {
+					title: input.input ? { contains: input.input, mode: 'insensitive' } : undefined,
+					category: input.category === 'ALL' ? undefined : input.category,
+				},
+			});
+		}),
 
 	getUserItems: protectedProcedure.query(async ({ ctx }) => {
 		return ctx.db.item.findMany({ where: { createdBy: { id: ctx.session.user.id } } });
