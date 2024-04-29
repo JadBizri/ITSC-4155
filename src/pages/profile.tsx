@@ -39,10 +39,14 @@ export default function Profile() {
 							</div>
 						</div>
 						<div className="m-10 flex">
-							<Tabs defaultValue="listings" className="m-auto">
+							<Tabs defaultValue="listings" className="m-auto w-[80%]">
 								<TabsList className="grid w-full grid-cols-2">
-									<TabsTrigger value="listings">My Listings</TabsTrigger>
-									<TabsTrigger value="offers">My Offers</TabsTrigger>
+									<TabsTrigger className="px-10" value="listings">
+										My Listings
+									</TabsTrigger>
+									<TabsTrigger className="px-10" value="offers">
+										My Offers
+									</TabsTrigger>
 								</TabsList>
 								<TabsContent value="listings">
 									<Card>
