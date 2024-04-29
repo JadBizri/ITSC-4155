@@ -30,20 +30,57 @@ export default function Search() {
 	}, [_width]);
 	const raw = Math.floor(width / 256) - 1;
 	const itemsPerRow = raw === 0 ? 1 : raw;
-	const originalItems = api.item.getItemMatchList.useQuery({
-		input: query.q as possibleQuery,
-		category: (query.c as possibleCategory)?.toUpperCase() as possibleCategory,
-	});
+	const originalItems = null;
+	// api.item.getItemMatchList.useQuery({
+	// 	input: query.q as possibleQuery,
+	// 	category: (query.c as possibleCategory)?.toUpperCase() as possibleCategory,
+	// });
 	const [looseTileItems, setLooseTileItems] = useState<ItemProp[]>([]);
-
 	useEffect(() => {
 		const fetchLooseTiles = async () => {
 			try {
-				const response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingSearch', {
-					searchQuery: query.q as possibleQuery,
-					zipcode: '28213',
-					category: null,
-				});
+				let response = null;
+				let offerUpCat = 0;
+				if (offerUpCat != 0) {
+					switch (query.c) {
+						case 'essentials':
+							offerUpCat = 2.2;
+							break;
+						case 'furniture':
+							offerUpCat = 2.1;
+							break;
+						case 'electronics':
+							offerUpCat = 1;
+							break;
+						case 'clothing':
+							offerUpCat = 4;
+							break;
+						default:
+							query.q = query.c?.toString();
+							break;
+					}
+					console.log(offerUpCat + 'first');
+
+					if (offerUpCat != 0) {
+						console.log(offerUpCat + 'first');
+						response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingCategories', {
+							zipcode: '28213',
+							category: '1', //offerUpCat ?? null,
+						});
+					} else {
+						response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingSearch', {
+							searchQuery: query.q as possibleQuery,
+							zipcode: '28213',
+						});
+					}
+					console.log(offerUpCat + 'second');
+				} else {
+					response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingSearch', {
+						searchQuery: query.q as possibleQuery,
+						zipcode: '28213',
+					});
+				}
+				//console.log(response);
 				const { data } = response;
 				setLooseTileItems(
 					data.data.modularFeed.looseTiles.slice(0, 50).map(
@@ -77,11 +114,12 @@ export default function Search() {
 		}
 	}, [query.q]);
 
-	if (originalItems.isLoading) return <div>Loading...</div>;
-	if (originalItems.isError) return <div>Error: {originalItems.error.message}</div>;
-	if (!originalItems.data) return <div>No data</div>;
+	// if (originalItems.isLoading) return <div>Loading...</div>;
+	// if (originalItems.isError) return <div>Error: {originalItems.error.message}</div>;
+	// if (!originalItems.data) return <div>No data</div>;
 
-	const combinedItems = [...(originalItems.data || []), ...looseTileItems];
+	//const combinedItems = [...(originalItems.data || []), ...looseTileItems];
+	const combinedItems = [...looseTileItems];
 	const rows = chunk(combinedItems, itemsPerRow);
 	return (
 		<div className="relative flex flex-col">
