@@ -30,4 +30,11 @@ export const offerRouter = createTRPCRouter({
 			include: { item: true },
 		});
 	}),
+
+	getItemOffers: protectedProcedure.input(z.number()).query(async ({ ctx, input }) => {
+		return ctx.db.offer.findMany({
+			where: { itemId: input },
+			include: { buyer: true },
+		});
+	}),
 });
