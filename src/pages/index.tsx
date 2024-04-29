@@ -9,54 +9,28 @@ import { SiteHeader } from '~/components/site-header';
 import { SiteSideBar } from '~/components/site-side-bar';
 import { Footer } from '~/components/footer';
 import { chunk } from '~/lib/utils';
-import { $Enums } from '@prisma/client';
+import type { Item as ItemProp } from '@prisma/client';
 import { toNum } from '~/lib/utils';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import type { ModularFeedResponse } from '~/lib/types';
 
-interface Tile {
-	listing: {
-		conditionText: string;
-		listingId: string;
-		image: {
-			url: string;
-		};
-		locationName: string;
-		price: string;
-		title: string;
-	};
-}
-interface ItemProps {
-	id: number;
-	title: string;
-	slug: string;
-	category: $Enums.Category;
-	price: number;
-	description: string;
-	images: string[];
-	location: string;
-	institution: string;
-	condition: string;
-	createdAt: Date;
-	updatedAt: Date;
-	visits: number;
-	UniqueVisits: number;
-	createdById: string;
-}
-interface ModularFeedResponse {
-	data: {
-		modularFeed: {
-			looseTiles: Tile[];
-		};
-	};
-}
 export default function Home() {
 	const originalItems = api.item.itemList.useQuery();
-	const { ref, width } = useResizeObserver<HTMLDivElement>();
-	const raw = Math.floor(width! / 256) - 1;
+	const [width, setWidth] = useState<number>(0);
+	const { ref, width: _width } = useResizeObserver<HTMLDivElement>({
+		onResize: ({ width }) => {
+			setWidth(width ?? 0);
+		},
+	});
+	useEffect(() => {
+		if (_width) {
+			setWidth(_width);
+		}
+	}, [_width]);
+	const raw = Math.floor(width / 256) - 1;
 	const itemsPerRow = raw === 0 ? 1 : raw;
-	console.log(width);
-	const [looseTileItems, setLooseTileItems] = useState<ItemProps[]>([]);
-	const [looseTileItemsRefresh, setLooseTileItemsRefresh] = useState<ItemProps[]>([]);
+	const [looseTileItems, setLooseTileItems] = useState<ItemProp[]>([]);
+	const [looseTileItemsRefresh, setLooseTileItemsRefresh] = useState<ItemProp[]>([]);
 	const fetchingRef = useRef(false);
 
 	useEffect(() => {
@@ -71,23 +45,26 @@ export default function Home() {
 				});
 				//console.log(response);
 				const newItems = response.data.flatMap(res =>
-					res.data.modularFeed.looseTiles.slice(0, 50).map(tile => ({
-						id: toNum(tile.listing.listingId),
-						title: tile.listing.title,
-						slug: 'https://offerup.com/item/detail/' + tile.listing.listingId,
-						category: 'OTHER' as $Enums.Category,
-						price: parseFloat(tile.listing.price),
-						description: 'Description not available',
-						images: [tile.listing.image.url],
-						location: tile.listing.locationName,
-						institution: 'OfferUp',
-						condition: 'Description not available',
-						createdAt: new Date(),
-						updatedAt: new Date(),
-						visits: 0,
-						UniqueVisits: 0,
-						createdById: 'default-user',
-					})),
+					res.data.modularFeed.looseTiles.slice(0, 50).map(
+						tile =>
+							({
+								id: toNum(tile.listing.listingId),
+								title: tile.listing.title,
+								slug: 'https://offerup.com/item/detail/' + tile.listing.listingId,
+								category: 'OTHER',
+								price: parseFloat(tile.listing.price),
+								description: 'Description not available',
+								images: [tile.listing.image.url],
+								location: tile.listing.locationName,
+								institution: 'OfferUp',
+								condition: 'Description not available',
+								createdAt: new Date(),
+								updatedAt: new Date(),
+								visits: 0,
+								UniqueVisits: 0,
+								createdById: 'default-user',
+							}) as ItemProp,
+					),
 				);
 				setLooseTileItems(prev => [...prev, ...newItems]);
 			} catch (error) {
@@ -127,7 +104,7 @@ export default function Home() {
 			<div className="relative flex flex-col">
 				<SiteHeader />
 				<div className="flex gap-10">
-					<SiteSideBar />
+					<SiteSideBar query={undefined} />
 					<div ref={ref} className="flex w-full justify-center">
 						<div className="flex flex-col gap-7">
 							{rows.map((row, i) => (
