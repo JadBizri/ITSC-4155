@@ -29,6 +29,7 @@ model Item {
     updatedAt    DateTime @updatedAt
     visits       Int      @default(0)
     UniqueVisits Int      @default(0)
+    Active       Boolean  @default(true)
 
     createdBy   User       @relation(fields: [createdById], references: [id])
     createdById String
