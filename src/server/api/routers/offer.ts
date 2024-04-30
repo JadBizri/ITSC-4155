@@ -38,11 +38,26 @@ export const offerRouter = createTRPCRouter({
 	}),
 
 	updateStatus: protectedProcedure
-		.input(z.object({ id: z.number(), status: z.enum(['PENDING', 'ACCEPTED', 'REJECTED']) }))
+		.input(z.object({ itemId: z.number(), offerId: z.number(), status: z.enum(['PENDING', 'ACCEPTED', 'REJECTED']) }))
 		.mutation(async ({ ctx, input }) => {
-			return ctx.db.offer.update({
-				where: { id: input.id },
-				data: { status: input.status },
-			});
+			if (input.status === 'ACCEPTED') {
+				await ctx.db.item.update({
+					where: { id: input.itemId },
+					data: { Active: false },
+				});
+				await ctx.db.offer.update({
+					where: { id: input.offerId },
+					data: { status: 'ACCEPTED' },
+				});
+				await ctx.db.offer.updateMany({
+					where: { itemId: input.itemId, status: { not: 'ACCEPTED' } },
+					data: { status: 'REJECTED' },
+				});
+			} else {
+				await ctx.db.offer.update({
+					where: { id: input.offerId },
+					data: { status: 'REJECTED' },
+				});
+			}
 		}),
 });
