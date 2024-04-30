@@ -30,6 +30,7 @@ export default function OfferPage() {
 	const mutation = api.offer.updateStatus.useMutation();
 
 	async function onSubmit(event: React.FormEvent<HTMLFormElement>, offerId: number) {
+		event.preventDefault();
 		if (item.data && sessionData) {
 			if (sessionData?.user.id !== item.data?.createdBy.id) {
 				form.setError('status', {
@@ -38,8 +39,9 @@ export default function OfferPage() {
 				});
 			} else {
 				await mutation.mutateAsync({
-					id: offerId,
-					status: 'ACCEPTED',
+					offerId: offerId,
+					status: form.getValues('status'),
+					itemId: item.data.id,
 				});
 				form.reset();
 				router.reload();
@@ -107,8 +109,8 @@ export default function OfferPage() {
 										<TableRow key={offer.itemId}>
 											<TableCell className="text-left">{offer.buyer.name}</TableCell>
 											<TableCell className="text-center">${(Math.round(offer.price * 100) / 100).toFixed(2)}</TableCell>
-											{item.data?.Active ? (
-												<TableCell className="text-center">
+											{item.data?.Active && offer.status === 'PENDING' ? (
+												<TableCell className="flex justify-center text-center">
 													<Form {...form}>
 														<FormItem>
 															<form onSubmit={e => onSubmit(e, offer.id)} className="flex items-center justify-center">
@@ -118,19 +120,47 @@ export default function OfferPage() {
 																	render={({ field }) => (
 																		<FormItem>
 																			<FormControl>
-																				<Input type="hidden" value={'ACCEPTED'} />
+																				<Input type="hidden" {...field} />
 																			</FormControl>
 																			<FormMessage />
 																		</FormItem>
 																	)}
 																/>
-																<Button type="submit">Accept</Button>
+																<Button
+																	type="submit"
+																	onClick={() => form.setValue('status', 'ACCEPTED')}
+																	className="me-3"
+																>
+																	Accept
+																</Button>
 															</form>
 														</FormItem>
 													</Form>
-													<Button className="ms-3" variant="destructive">
-														Reject
-													</Button>
+													<Form {...form}>
+														<FormItem>
+															<form onSubmit={e => onSubmit(e, offer.id)} className="flex items-center justify-center">
+																<FormField
+																	control={form.control}
+																	name="status"
+																	render={({ field }) => (
+																		<FormItem>
+																			<FormControl>
+																				<Input type="hidden" {...field} />
+																			</FormControl>
+																			<FormMessage />
+																		</FormItem>
+																	)}
+																/>
+																<Button
+																	type="submit"
+																	onClick={() => form.setValue('status', 'REJECTED')}
+																	variant="destructive"
+																>
+																	Reject
+																</Button>
+															</form>
+														</FormItem>
+													</Form>
 												</TableCell>
 											) : (
 												<TableCell className="text-center">{offer.status}</TableCell>
