@@ -155,9 +155,16 @@ export default function Profile() {
 																<Link /* MUST ADD LINK TO EDIT ITEM PAGE HERE */ href={'#'}>
 																	<Button variant="secondary">Edit</Button>
 																</Link>
-																<Link href={'/offer/' + item.slug}>
-																	<Button variant="secondary">View Offers</Button>
-																</Link>
+																{item.offers.length !== 0 ? (
+																	<Link href={'/offer/' + item.slug}>
+																		<Button variant="secondary">Offers ({item.offers.length})</Button>
+																	</Link>
+																) : (
+																	<Button disabled variant="secondary">
+																		Offers (0)
+																	</Button>
+																)}
+
 																<Button variant="destructive">Delete</Button>
 															</div>
 														</div>
