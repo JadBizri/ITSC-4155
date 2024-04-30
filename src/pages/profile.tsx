@@ -17,15 +17,25 @@ export default function Profile() {
 
 	if (!sessionData) {
 		return (
-			<div className="flex min-h-screen items-center justify-center bg-white dark:bg-zinc-950">
-				<p>You need to be signed in to view this page</p>
-			</div>
+			<>
+				<Head>
+					<title>Unauthorized Access</title>
+					<meta name="error" content="Error" />
+					<link rel="icon" href="/favicon.ico" />
+				</Head>
+				<div className="relative flex min-h-screen flex-col bg-white dark:bg-zinc-950">
+					<SiteHeader />
+					<h1 className="m-auto text-center text-4xl">
+						Unauthorized Access: You need to be signed in to view this page
+					</h1>
+				</div>
+			</>
 		);
 	} else {
 		return (
 			<>
 				<Head>
-					<title>Profile</title>
+					<title>FlipMart Profile</title>
 					<meta name="description" content="Profile page" />
 					<link rel="icon" href="/favicon.ico" />
 				</Head>
@@ -42,44 +52,15 @@ export default function Profile() {
 							</div>
 						</div>
 						<div className="m-10 flex w-[80%]">
-							<Tabs defaultValue="listings" className="m-auto w-[80%]">
+							<Tabs defaultValue="offers" className="m-auto w-[80%]">
 								<TabsList className="grid w-full grid-cols-2">
-									<TabsTrigger className="px-10" value="listings">
-										My Listings
-									</TabsTrigger>
 									<TabsTrigger className="px-10" value="offers">
 										My Offers
 									</TabsTrigger>
+									<TabsTrigger className="px-10" value="listings">
+										My Listings
+									</TabsTrigger>
 								</TabsList>
-								<TabsContent value="listings">
-									<Card>
-										<CardHeader>
-											<CardTitle>My Listings</CardTitle>
-										</CardHeader>
-										<CardContent className="space-y-2">
-											{items.data?.length === 0 ? (
-												<h1 className="text-4xl">You currently do not have any active listings</h1>
-											) : (
-												<div className="flex flex-wrap justify-around">
-													{items.data?.map(item => (
-														<div className="m-2">
-															<Item key={item.id} {...item} />
-															<div className="mt-2 flex justify-around">
-																<Link /* MUST ADD LINK TO EDIT ITEM PAGE HERE */ href={'#'}>
-																	<Button variant="secondary">Edit</Button>
-																</Link>
-																<Link href={'/offer/' + item.slug}>
-																	<Button variant="secondary">View Offers</Button>
-																</Link>
-																<Button variant="destructive">Delete</Button>
-															</div>
-														</div>
-													))}
-												</div>
-											)}
-										</CardContent>
-									</Card>
-								</TabsContent>
 								<TabsContent value="offers">
 									<Card>
 										<CardHeader>
@@ -116,6 +97,35 @@ export default function Profile() {
 														))}
 													</TableBody>
 												</Table>
+											)}
+										</CardContent>
+									</Card>
+								</TabsContent>
+								<TabsContent value="listings">
+									<Card>
+										<CardHeader>
+											<CardTitle>My Listings</CardTitle>
+										</CardHeader>
+										<CardContent className="space-y-2">
+											{items.data?.length === 0 ? (
+												<h1 className="text-4xl">You currently do not have any active listings</h1>
+											) : (
+												<div className="flex flex-wrap justify-around">
+													{items.data?.map(item => (
+														<div key={item.id} className="m-2">
+															<Item key={item.id} {...item} />
+															<div className="mt-2 flex justify-around">
+																<Link /* MUST ADD LINK TO EDIT ITEM PAGE HERE */ href={'#'}>
+																	<Button variant="secondary">Edit</Button>
+																</Link>
+																<Link href={'/offer/' + item.slug}>
+																	<Button variant="secondary">View Offers</Button>
+																</Link>
+																<Button variant="destructive">Delete</Button>
+															</div>
+														</div>
+													))}
+												</div>
 											)}
 										</CardContent>
 									</Card>

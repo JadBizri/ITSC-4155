@@ -11,7 +11,6 @@ import { Footer } from '~/components/footer';
 import { chunk } from '~/lib/utils';
 import type { Item as ItemProp } from '@prisma/client';
 import { toNum } from '~/lib/utils';
-import { signIn, signOut, useSession } from 'next-auth/react';
 import type { ModularFeedResponse } from '~/lib/types';
 
 export default function Home() {
@@ -30,7 +29,6 @@ export default function Home() {
 	const raw = Math.floor(width / 256) - 1;
 	const itemsPerRow = raw === 0 ? 1 : raw;
 	const [looseTileItems, setLooseTileItems] = useState<ItemProp[]>([]);
-	const [looseTileItemsRefresh, setLooseTileItemsRefresh] = useState<ItemProp[]>([]);
 	const fetchingRef = useRef(false);
 
 	useEffect(() => {
