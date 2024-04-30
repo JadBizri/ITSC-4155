@@ -31,7 +31,7 @@ model Item {
     UniqueVisits Int      @default(0)
     Active       Boolean  @default(true)
 
-    createdBy   User       @relation(fields: [createdById], references: [id])
+    createdBy   User       @relation(fields: [createdById], references: [id], onDelete: Cascade)
     createdById String
     Comments    Comments[]
     offers      Offer[]

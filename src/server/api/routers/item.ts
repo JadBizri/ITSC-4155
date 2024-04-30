@@ -63,4 +63,8 @@ export const itemRouter = createTRPCRouter({
 	getUserItems: protectedProcedure.query(async ({ ctx }) => {
 		return ctx.db.item.findMany({ where: { createdBy: { id: ctx.session.user.id } } });
 	}),
+
+	deleteUserItem: protectedProcedure.input(z.number()).mutation(async ({ ctx, input }) => {
+		return ctx.db.item.delete({ where: { id: input, createdBy: { id: ctx.session.user.id } } });
+	}),
 });

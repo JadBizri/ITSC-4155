@@ -28,10 +28,16 @@ export default function Profile() {
 	const items = api.item.getUserItems.useQuery();
 	const userOffers = api.offer.getUserOffers.useQuery();
 	const mutation = api.user.deleteUser.useMutation();
+	const itemMutation = api.item.deleteUserItem.useMutation();
 
 	async function handleClick() {
 		await mutation.mutateAsync();
 		await router.push('/');
+		router.reload();
+	}
+
+	async function deleteItemOnClick(id: number) {
+		await itemMutation.mutateAsync(id);
 		router.reload();
 	}
 
@@ -158,7 +164,26 @@ export default function Profile() {
 																<Link href={'/offer/' + item.slug}>
 																	<Button variant="secondary">View Offers</Button>
 																</Link>
-																<Button variant="destructive">Delete</Button>
+																<AlertDialog>
+																	<AlertDialogTrigger asChild>
+																		<Button variant="destructive">Delete Item</Button>
+																	</AlertDialogTrigger>
+																	<AlertDialogContent>
+																		<AlertDialogHeader>
+																			<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+																			<AlertDialogDescription>
+																				This action cannot be undone. This will permanently delete an item from your
+																				account. This information will be lost.
+																			</AlertDialogDescription>
+																		</AlertDialogHeader>
+																		<AlertDialogFooter>
+																			<AlertDialogCancel>Cancel</AlertDialogCancel>
+																			<AlertDialogAction>
+																				<Button onClick={() => deleteItemOnClick(item.id)}>Confirm</Button>
+																			</AlertDialogAction>
+																		</AlertDialogFooter>
+																	</AlertDialogContent>
+																</AlertDialog>
 															</div>
 														</div>
 													))}
