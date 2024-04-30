@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import router, { useRouter } from 'next/router';
 import { SiteHeader } from '~/components/site-header';
 import { api } from '~/utils/api';
 import { Button } from '~/components/ui/button';
@@ -6,12 +6,51 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Head from 'next/head';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '~/components/ui/form';
+import { Input } from '~/components/ui/input';
+
+const formSchema = z.object({
+	id: z.number(),
+	status: z.enum(['PENDING', 'ACCEPTED', 'REJECTED']),
+});
 
 export default function OfferPage() {
 	const { query } = useRouter();
 	const item = api.item.getItemSlug.useQuery(query.slug as string);
 	const getOffers = api.offer.getItemOffers.useQuery(item.data?.id || 0);
 	const { data: sessionData } = useSession();
+
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+	});
+
+	const mutation = api.offer.updateStatus.useMutation();
+
+	async function onSubmit(event: React.FormEvent<HTMLFormElement>, offerId: number) {
+		if (item.data && sessionData) {
+			if (sessionData?.user.id !== item.data?.createdBy.id) {
+				form.setError('status', {
+					type: 'manual',
+					message: 'You are not the owner of this product.',
+				});
+			} else {
+				await mutation.mutateAsync({
+					id: offerId,
+					status: 'ACCEPTED',
+				});
+				form.reset();
+				router.reload();
+			}
+		} else {
+			form.setError('status', {
+				type: 'manual',
+				message: 'Something went wrong, please try again later.',
+			});
+		}
+	}
 
 	if (sessionData?.user?.id !== item.data?.createdBy.id) {
 		return (
@@ -70,7 +109,25 @@ export default function OfferPage() {
 											<TableCell className="text-center">${(Math.round(offer.price * 100) / 100).toFixed(2)}</TableCell>
 											{item.data?.Active ? (
 												<TableCell className="text-center">
-													<Button variant="secondary">Accept</Button>
+													<Form {...form}>
+														<FormItem>
+															<form onSubmit={e => onSubmit(e, offer.id)} className="flex items-center justify-center">
+																<FormField
+																	control={form.control}
+																	name="status"
+																	render={({ field }) => (
+																		<FormItem>
+																			<FormControl>
+																				<Input type="hidden" value={'ACCEPTED'} />
+																			</FormControl>
+																			<FormMessage />
+																		</FormItem>
+																	)}
+																/>
+																<Button type="submit">Accept</Button>
+															</form>
+														</FormItem>
+													</Form>
 													<Button className="ms-3" variant="destructive">
 														Reject
 													</Button>
