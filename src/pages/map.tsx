@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import { cn } from '~/lib/utils';
 import Head from 'next/head';
 import { SiteHeader } from '~/components/site-header';

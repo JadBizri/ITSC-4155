@@ -112,7 +112,7 @@ export default function Profile() {
 											) : (
 												<div className="flex flex-wrap justify-around">
 													{items.data?.map(item => (
-														<div className="m-2">
+														<div key={item.id} className="m-2">
 															<Item key={item.id} {...item} />
 															<div className="mt-2 flex justify-around">
 																<Link /* MUST ADD LINK TO EDIT ITEM PAGE HERE */ href={'#'}>

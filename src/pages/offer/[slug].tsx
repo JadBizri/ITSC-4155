@@ -20,7 +20,7 @@ const formSchema = z.object({
 export default function OfferPage() {
 	const { query } = useRouter();
 	const item = api.item.getItemSlug.useQuery(query.slug as string);
-	const getOffers = api.offer.getItemOffers.useQuery(item.data?.id || 0);
+	const getOffers = api.offer.getItemOffers.useQuery(item.data?.id ?? 0);
 	const { data: sessionData } = useSession();
 
 	const form = useForm<z.infer<typeof formSchema>>({
