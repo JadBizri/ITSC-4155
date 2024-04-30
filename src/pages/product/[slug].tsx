@@ -104,6 +104,7 @@ export default function ProductPage() {
 						) : (
 							<></>
 						)}
+						{!item.data?.Active ? <p className="mt-3 text-red-500">This item is no longer available</p> : <></>}
 						<p className="leading-7 [&:not(:first-child)]:mt-6">${item.data?.price}</p>
 						<Accordion type="multiple" defaultValue={['description']} className="w-full">
 							<AccordionItem value="description" datatype="open">
