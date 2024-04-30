@@ -61,7 +61,12 @@ export const itemRouter = createTRPCRouter({
 		}),
 
 	getUserItems: protectedProcedure.query(async ({ ctx }) => {
-		return ctx.db.item.findMany({ where: { createdBy: { id: ctx.session.user.id } } });
+		//order by length of offers
+		return ctx.db.item.findMany({
+			where: { createdById: ctx.session.user.id },
+			include: { offers: true },
+			orderBy: { offers: { _count: 'desc' } },
+		});
 	}),
 
 	deleteUserItem: protectedProcedure.input(z.number()).mutation(async ({ ctx, input }) => {

@@ -184,6 +184,17 @@ export default function Profile() {
 																		</AlertDialogFooter>
 																	</AlertDialogContent>
 																</AlertDialog>
+																{item.offers.length !== 0 ? (
+																	<Link href={'/offer/' + item.slug}>
+																		<Button variant="secondary">Offers ({item.offers.length})</Button>
+																	</Link>
+																) : (
+																	<Button disabled variant="secondary">
+																		Offers (0)
+																	</Button>
+																)}
+
+																<Button variant="destructive">Delete</Button>
 															</div>
 														</div>
 													))}
