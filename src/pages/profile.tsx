@@ -32,7 +32,7 @@ export default function Profile() {
 	async function handleClick() {
 		await mutation.mutateAsync();
 		await router.push('/');
-		await router.reload();
+		router.reload();
 	}
 
 	if (!sessionData) {
