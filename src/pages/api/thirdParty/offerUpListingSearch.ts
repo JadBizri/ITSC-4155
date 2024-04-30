@@ -15,11 +15,14 @@ export const thirdPartySearch = async (req: NextApiRequest, res: NextApiResponse
 			variables: {
 				debug: false,
 				searchParams: [
-					{ key: 'DISTANCE', value: '5' },
+					{ key: 'DISTANCE', value: '10' },
 					{ key: 'q', value: searchQuery },
+					//{ key: 'DELIVERY_FLAGS', value: 'p'},
+					//{ key: "DELIVERY_FLAGS", value: "p"},
 					{ key: 'platform', value: 'web_mobile' },
 					{ key: 'zipcode', value: zipcode },
 					{ key: 'experiment_id', value: 'experimentmodel24' },
+					//{ key: 'page_cursor', value: 'H4sIAAAAAAAAAD2OwW6DMBBE_2XPHDCBpnBDKVSRcoia3poKOXhNLFEbee2oEeLfu6hpj6OZeTMzEErfX09IZJzdK6iAWG9E-SxyqfUlTXOV4yUtLlqWWVEWIhNZX00dQQJaWhfDKcgQiZuH-r156471a_PvQTVDuE-4cq9mmowd2HPeDMbK8QVHc0N_b0c5rIBf6l-wfRCCj7gkj6ctotpFT85zfj6D05ownKESm-2yzrLPhzz3xNM2gcnjzbhIRzngwVBg7l7x1sdnAlJR1ztL8QtV8x3Q86Va0c5Fy_V0-QHBxSlnHgEAAA'},
 					{ key: 'limit', value: '50' },
 					{ key: 'searchSessionId', value: '52c93fc1-58fb-4545-83ad-59dd8bb18a62' },
 				],

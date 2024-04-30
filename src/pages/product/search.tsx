@@ -11,6 +11,7 @@ import type { ModularFeedResponse } from '~/lib/types';
 import useResizeObserver from 'use-resize-observer';
 import { chunk } from '~/lib/utils';
 import { Footer } from '~/components/footer';
+import { toNum } from '~/lib/utils';
 
 type possibleQuery = string | undefined;
 type possibleCategory = 'TEXTBOOKS' | 'ELECTRONICS' | 'CLOTHING' | 'ESSENTIALS' | 'FURNITURE' | 'OTHER' | undefined;
@@ -75,27 +76,31 @@ export default function Search() {
 				}
 				//console.log(response);
 				const { data } = response;
+				console.log(response);
 				setLooseTileItems(
-					data.data.modularFeed.looseTiles.slice(0, 50).map(
-						tile =>
-							({
-								id: parseInt(tile.listing.listingId),
-								title: tile.listing.title,
-								slug: 'https://offerup.com/item/detail/' + tile.listing.listingId,
-								category: 'OTHER',
-								price: parseFloat(tile.listing.price),
-								description: 'Description not available',
-								images: [tile.listing.image.url],
-								location: tile.listing.locationName,
-								institution: 'OfferUp',
-								condition: 'Description not available',
-								createdAt: new Date(),
-								updatedAt: new Date(),
-								visits: 0,
-								UniqueVisits: 0,
-								createdById: 'default-user',
-							}) as ItemProp,
-					),
+					data?.data?.modularFeed?.looseTiles
+						.slice(0, 50)
+						.filter(tile => !tile.listing.flags.includes('SHOW_SHIPPING_ICON'))
+						.map(
+							tile =>
+								({
+									id: toNum(tile?.listing?.listingId),
+									title: tile.listing.title,
+									slug: 'https://offerup.com/item/detail/' + tile.listing.listingId,
+									category: 'OTHER',
+									price: parseFloat(tile.listing.price),
+									description: 'Description not available',
+									images: [tile.listing.image.url],
+									location: tile.listing.locationName,
+									institution: 'OfferUp',
+									condition: 'Description not available',
+									createdAt: new Date(),
+									updatedAt: new Date(),
+									visits: 0,
+									UniqueVisits: 0,
+									createdById: 'default-user',
+								}) as ItemProp,
+						),
 				);
 			} catch (error) {
 				console.error('Failed to fetch loose tiles:', error);
