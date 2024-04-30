@@ -35,7 +35,7 @@ export default function Profile() {
 		return (
 			<>
 				<Head>
-					<title>Profile</title>
+					<title>FlipMart Profile</title>
 					<meta name="description" content="Profile page" />
 					<link rel="icon" href="/favicon.ico" />
 				</Head>
