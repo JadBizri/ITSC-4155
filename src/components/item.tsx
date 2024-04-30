@@ -10,7 +10,7 @@ export function Item({ title, images, price, institution, slug }: Item) {
 
 	return (
 		<div className="flex max-w-64 flex-col">
-			<Link className="flex w-64 flex-col" href={`${slug}`}>
+			<Link className="flex w-64 flex-col" target={slug.startsWith('https') ? '_blank' : '_self'} href={`${slug}`}>
 				<AspectRatio ratio={1 / 1} className="bg-muted">
 					<Image
 						src={images[0] ?? 'https://i.imgur.com/G4f21Ai.jpeg'}
