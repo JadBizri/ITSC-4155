@@ -6,8 +6,6 @@ export const offerRouter = createTRPCRouter({
 	create: protectedProcedure
 		.input(
 			z.object({
-				amount: z.number().positive().safe(),
-				status: z.enum(['PENDING', 'ACCEPTED', 'REJECTED']),
 				price: z.number().positive().safe(),
 				item: z.number(),
 				buyer: z.string(),
@@ -17,6 +15,7 @@ export const offerRouter = createTRPCRouter({
 			return ctx.db.offer.create({
 				data: {
 					...input,
+					price: Math.round(input.price * 100) / 100,
 					item: { connect: { id: input.item } },
 					buyer: { connect: { id: ctx.session.user.id } },
 				},
