@@ -45,7 +45,7 @@ export const thirdPartyCatergories = async (req: NextApiRequest, res: NextApiRes
 					{ key: 'experiment_id', value: 'experimentmodel24' },
 					{ key: 'limit', value: '50' },
 					{ key: 'searchSessionId', value: '52c93fc1-58fb-4545-83ad-59dd8bb18a62' },
-					{ key: 'cid', value: category.toString() }, //all clothing
+					{ key: 'cid', value: category.toString() },
 					{ key: 'page_cursor', value: pageCursor[Math.floor(Math.random() * (pageCursor.length + 1))] },
 				],
 			},
