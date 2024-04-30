@@ -17,9 +17,19 @@ export default function Profile() {
 
 	if (!sessionData) {
 		return (
-			<div className="flex min-h-screen items-center justify-center bg-white dark:bg-zinc-950">
-				<p>You need to be signed in to view this page</p>
-			</div>
+			<>
+				<Head>
+					<title>Unauthorized Access</title>
+					<meta name="error" content="Error" />
+					<link rel="icon" href="/favicon.ico" />
+				</Head>
+				<div className="relative flex min-h-screen flex-col bg-white dark:bg-zinc-950">
+					<SiteHeader />
+					<h1 className="m-auto text-center text-4xl">
+						Unauthorized Access: You need to be signed in to view this page
+					</h1>
+				</div>
+			</>
 		);
 	} else {
 		return (
