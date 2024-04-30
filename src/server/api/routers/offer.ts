@@ -36,4 +36,13 @@ export const offerRouter = createTRPCRouter({
 			include: { buyer: true },
 		});
 	}),
+
+	updateStatus: protectedProcedure
+		.input(z.object({ id: z.number(), status: z.enum(['PENDING', 'ACCEPTED', 'REJECTED']) }))
+		.mutation(async ({ ctx, input }) => {
+			return ctx.db.offer.update({
+				where: { id: input.id },
+				data: { status: input.status },
+			});
+		}),
 });
