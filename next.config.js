@@ -40,6 +40,10 @@ const config = {
 				protocol: 'https',
 				hostname: 'placeimg.com',
 			},
+			{
+				protocol: 'https',
+				hostname: 'utfs.io',
+			},
 		],
 	},
 };
