@@ -17,3 +17,15 @@ export function toNum(uuid: string): number {
 	}
 	return hash;
 }
+
+export function generateSlug(title: string): string {
+	return `${title.toLowerCase().replace(/ /g, '-')}-${rand(9)}`;
+}
+
+function rand(len: number) {
+	let x = '';
+	for (let i = 0; i < len; i++) {
+		x += Math.floor(Math.random() * 10);
+	}
+	return x;
+}

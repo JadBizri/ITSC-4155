@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { generateSlug } from '~/lib/utils';
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '~/server/api/trpc';
 
@@ -24,7 +25,7 @@ export const itemRouter = createTRPCRouter({
 			return ctx.db.item.create({
 				data: {
 					title: input.title,
-					slug: input.title.toLowerCase().replace(/ /g, '-'),
+					slug: generateSlug(input.title),
 					category: input.category,
 					price: input.price,
 					description: input.description,
