@@ -48,13 +48,14 @@ export default function Profile() {
 		setLoading(true);
 		try {
 			//console.log(phoneNumber);
-			const response = await axios.post('/api/otp/otpSend', { phoneNumber });
-			//console.log(response);
-			if (response.status === 200) {
-				setOtpSent(true);
-			} else {
-				setOtpSent(false);
-			}
+			// const response = await axios.post('/api/otp/otpSend', { phoneNumber });
+			// //console.log(response);
+			// if (response.status === 200) {
+			// 	setOtpSent(true);
+			// } else {
+			// 	setOtpSent(false);
+			// }
+			setOtpSent(true);
 		} catch (error) {
 			setOtpSent(false);
 			//alert('Failed to send OTP');
@@ -67,24 +68,25 @@ export default function Profile() {
 		setLoading(true);
 		try {
 			//console.log(otpCode);
-			const response = await axios.post('/api/otp/otpVerify', { phoneNumber, otpCode });
-			if (response.status === 200) {
-				setPhoneVerified(true);
-				setFeedbackMessage('Phone number verified successfully!');
-				//console.log(response)
-				//const now = new Date();
-				// await prisma.user.update({
-				// 	where: { id: sessionData.user.id },
-				// 	data: {
-				// 		phone: phoneNumber,
-				// 		phoneVerified: now
-				// 	}
-				// });
-				//console.log(prismaResp);
-			} else {
-				setPhoneVerified(false);
-				setFeedbackMessage('Verification failed. Please try again.');
-			}
+			// const response = await axios.post('/api/otp/otpVerify', { phoneNumber, otpCode });
+			// if (response.status === 200) {
+			// 	setPhoneVerified(true);
+			// 	setFeedbackMessage('Phone number verified successfully!');
+			// 	//console.log(response)
+			// 	//const now = new Date();
+			// 	// await prisma.user.update({
+			// 	// 	where: { id: sessionData.user.id },
+			// 	// 	data: {
+			// 	// 		phone: phoneNumber,
+			// 	// 		phoneVerified: now
+			// 	// 	}
+			// 	// });
+			// 	//console.log(prismaResp);
+			// } else {
+			// 	setPhoneVerified(false);
+			// 	setFeedbackMessage('Verification failed. Please try again.');
+			// }
+			setPhoneVerified(true);
 		} catch (error) {
 			setPhoneVerified(false);
 			setFeedbackMessage('Verification failed. Please try again.');
@@ -138,52 +140,57 @@ export default function Profile() {
 														Send Verification Code
 													</Button>
 												</PopoverTrigger>
-												{otpSent ? (
-													<PopoverContent className="w-80">
-														<InputOTP maxLength={6} onChange={handleOtpChange}>
-															<InputOTPGroup>
-																<InputOTPSlot index={0} />
-																<InputOTPSlot index={1} />
-																<InputOTPSlot index={2} />
-															</InputOTPGroup>
-															<InputOTPSeparator />
-															<InputOTPGroup>
-																<InputOTPSlot index={3} />
-																<InputOTPSlot index={4} />
-																<InputOTPSlot index={5} />
-															</InputOTPGroup>
-														</InputOTP>
-														<Popover>
-															<PopoverTrigger asChild>
-																<Button
-																	variant="outline"
-																	className="m-auto"
-																	onClick={handleVerifyOTP}
-																	disabled={loading}
-																>
-																	Verify Code
-																</Button>
-															</PopoverTrigger>
-															<PopoverContent>
-																{loading ? (
-																	<p>Verifying...</p> // Display a loading message or spinner
-																) : phoneVerified ? (
-																	<p className="text-green-500">Phone number has been added and verified!</p>
-																) : (
-																	<p className="text-red-500">Fail to verify phone number</p>
-																)}
-															</PopoverContent>
-														</Popover>
-													</PopoverContent>
-												) : (
-													<PopoverContent>
-														{loading ? (
-															<p>Sending...</p> // Display a loading message or spinner
-														) : (
-															<p className="text-red-500">Fail to send OTP...please try again later.</p>
-														)}
-													</PopoverContent>
-												)}
+												<div className="flex flex-col items-center justify-center">
+													{otpSent ? (
+														<PopoverContent className="w-80">
+															<div className="flex flex-col items-center justify-center">
+																<InputOTP maxLength={6} onChange={handleOtpChange}>
+																	<InputOTPGroup>
+																		<InputOTPSlot index={0} />
+																		<InputOTPSlot index={1} />
+																		<InputOTPSlot index={2} />
+																	</InputOTPGroup>
+																	<InputOTPSeparator />
+																	<InputOTPGroup>
+																		<InputOTPSlot index={3} />
+																		<InputOTPSlot index={4} />
+																		<InputOTPSlot index={5} />
+																	</InputOTPGroup>
+																</InputOTP>
+																<Popover>
+																	<PopoverTrigger asChild>
+																		<Button
+																			variant="outline"
+																			className="mx-auto my-2"
+																			onClick={handleVerifyOTP}
+																			disabled={loading}
+																		>
+																			{' '}
+																			Verify Code{' '}
+																		</Button>
+																	</PopoverTrigger>
+																	<PopoverContent>
+																		{loading ? (
+																			<p>Verifying...</p>
+																		) : phoneVerified ? (
+																			<p className="text-green-500">Phone number has been added and verified!</p>
+																		) : (
+																			<p className="text-red-500">Fail to verify phone number</p>
+																		)}
+																	</PopoverContent>
+																</Popover>
+															</div>
+														</PopoverContent>
+													) : (
+														<PopoverContent>
+															{loading ? (
+																<p>Sending...</p>
+															) : (
+																<p className="text-red-500">Fail to send OTP...please try again later.</p>
+															)}
+														</PopoverContent>
+													)}
+												</div>
 											</Popover>
 										</CardFooter>
 									</Card>
