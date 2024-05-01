@@ -7,7 +7,7 @@ export function SiteSideBar({ query }: { query: string | undefined } = { query: 
 		<aside className="block pl-6">
 			<h4 className="mb-2 scroll-m-20 text-xl font-semibold tracking-tight">Categories</h4>
 			<div className="flex flex-col gap-2">
-				<Link href={query ? `/product/search?q=${query}&c=all` : `/product/search?c=all`} className="flex gap-2">
+				<Link href={`/`} className="flex gap-2">
 					<HomeIcon />
 					<p className="leading-7">Browse All</p>
 				</Link>

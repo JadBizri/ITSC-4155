@@ -11,6 +11,7 @@ import type { ModularFeedResponse } from '~/lib/types';
 import useResizeObserver from 'use-resize-observer';
 import { chunk } from '~/lib/utils';
 import { Footer } from '~/components/footer';
+import { toNum } from '~/lib/utils';
 
 type possibleQuery = string | undefined;
 type possibleCategory = 'TEXTBOOKS' | 'ELECTRONICS' | 'CLOTHING' | 'ESSENTIALS' | 'FURNITURE' | 'OTHER' | undefined;
@@ -36,7 +37,7 @@ export default function Search() {
 	});
 	const [looseTileItems, setLooseTileItems] = useState<ItemProp[]>([]);
 	useEffect(() => {
-		const fetchLooseTiles = async () => {
+		const fetchLooseTiles = async (refresh: string) => {
 			try {
 				let response = null;
 				let offerUpCat = 0;
@@ -61,25 +62,28 @@ export default function Search() {
 							category: offerUpCat, //offerUpCat ?? null,
 						});
 					} else {
-						response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingSearch', {
+						response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingSearch' + refresh, {
 							searchQuery: query.c as possibleQuery,
 							zipcode: '28213',
 						});
 					}
 					console.log(offerUpCat + 'second');
 				} else {
-					response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingSearch', {
+					response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingSearch' + refresh, {
 						searchQuery: query.q as possibleQuery,
 						zipcode: '28213',
 					});
 				}
 				//console.log(response);
 				const { data } = response;
-				setLooseTileItems(
-					data.data.modularFeed.looseTiles.slice(0, 50).map(
+				console.log(response);
+				let newItems = data?.data?.modularFeed?.looseTiles
+					.slice(0, 50)
+					.filter(tile => !tile.listing.flags.includes('SHOW_SHIPPING_ICON'))
+					.map(
 						tile =>
 							({
-								id: parseInt(tile.listing.listingId),
+								id: toNum(tile?.listing?.listingId),
 								title: tile.listing.title,
 								slug: 'https://offerup.com/item/detail/' + tile.listing.listingId,
 								category: 'OTHER',
@@ -95,23 +99,24 @@ export default function Search() {
 								UniqueVisits: 0,
 								createdById: 'default-user',
 							}) as ItemProp,
-					),
-				);
+					);
+				if (!(query.c && query.q)) {
+					setLooseTileItems(prev => [...prev, ...newItems]);
+				}
 			} catch (error) {
 				console.error('Failed to fetch loose tiles:', error);
 			}
 		};
 
 		if (query.q ?? query.c) {
-			void fetchLooseTiles();
+			void fetchLooseTiles('');
 		}
 		const handleScroll = () => {
 			const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 300;
 			if (nearBottom) {
-				void fetchLooseTiles();
+				void fetchLooseTiles('Refresh');
 			}
 		};
-
 		window.addEventListener('scroll', handleScroll);
 		return () => window.removeEventListener('scroll', handleScroll);
 	}, [query.q, query.c]);
@@ -126,7 +131,9 @@ export default function Search() {
 	return (
 		<div className="relative flex flex-col">
 			<SiteHeader />
-			<h1 className="text-center">Searching for {query.q}</h1>
+			<h1 className="text-center">
+				Searching for {query.q} with category {query.c}{' '}
+			</h1>
 			<div className="flex gap-10">
 				<SiteSideBar query={query.q as possibleQuery} />
 				<div ref={ref} className="flex w-full justify-center">
