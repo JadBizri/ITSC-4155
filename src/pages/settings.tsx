@@ -56,6 +56,7 @@ export default function Profile() {
 			setOtpSent(true);
 		} catch (error) {
 			setOtpSent(false);
+			console.log(error);
 		} finally {
 			setLoading(false);
 		}
@@ -73,6 +74,7 @@ export default function Profile() {
 			}
 		} catch (error) {
 			setPhoneVerified(false);
+			console.log(error);
 		} finally {
 			setLoading(false);
 		}
