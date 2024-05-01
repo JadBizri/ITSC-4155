@@ -13,11 +13,11 @@ import { Button } from '~/components/ui/button';
 import { PatternFormat } from 'react-number-format';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '~/components/ui/input-otp';
-import { PrismaClient } from '@prisma/client';
 import otpVerify from './api/otp/otpVerify';
+import { api } from '~/utils/api';
 
 export default function Profile() {
-	const prisma = new PrismaClient();
+	const mutation = api.user.verifyUser.useMutation();
 
 	const { data: sessionData } = useSession();
 	const [phoneNumber, setPhoneNumber] = useState('');
@@ -68,7 +68,7 @@ export default function Profile() {
 			const response = await axios.post('/api/otp/otpVerify', { phoneNumber, otpCode });
 			if (response.status === 200) {
 				setPhoneVerified(true);
-				//**TODO** add phone into database
+				await mutation.mutateAsync({ phone: phoneNumber, phoneVerified: new Date() });
 			} else {
 				setPhoneVerified(false);
 			}
