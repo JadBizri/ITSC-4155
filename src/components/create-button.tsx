@@ -23,14 +23,14 @@ export function CreateButton() {
 
 	const handleCreateClick = () => {
 		if (user.data?.phoneVerified) {
-			router.push('/create'); // If phone is verified, navigate to create page
+			void router.push('/create'); // If phone is verified, navigate to create page
 		} else {
 			setDialogOpen(true); // If not verified, open the alert dialog
 		}
 	};
 
 	const handleConfirm = () => {
-		router.push('/settings'); // Redirect to settings page for phone verification
+		void router.push('/settings'); // Redirect to settings page for phone verification
 	};
 	//return <Button onClick={() => router.push('/create')}>Create an Item</Button>;
 	return (
