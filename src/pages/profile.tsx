@@ -158,7 +158,7 @@ export default function Profile() {
 														<div key={item.id} className="m-2">
 															<Item key={item.id} {...item} />
 															<div className="mt-2 flex justify-around">
-																<Link /* MUST ADD LINK TO EDIT ITEM PAGE HERE */ href={'#'}>
+																<Link /* MUST ADD LINK TO EDIT ITEM PAGE HERE */ href={`/product/${item.slug}/edit`}>
 																	<Button variant="secondary">Edit</Button>
 																</Link>
 																{item.offers.length !== 0 ? (
