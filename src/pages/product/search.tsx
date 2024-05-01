@@ -77,7 +77,7 @@ export default function Search() {
 				//console.log(response);
 				const { data } = response;
 				console.log(response);
-				let newItems = data?.data?.modularFeed?.looseTiles
+				const newItems = data?.data?.modularFeed?.looseTiles
 					.slice(0, 50)
 					.filter(tile => !tile.listing.flags.includes('SHOW_SHIPPING_ICON'))
 					.map(
