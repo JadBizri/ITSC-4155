@@ -65,206 +65,208 @@ export default function Create() {
 				<div>
 					<div className="relative flex flex-col">
 						<SiteHeader />
-						<h1>Create Listing</h1>
-						<Form {...form}>
-							<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-								<FormField
-									control={form.control}
-									name="title"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Title</FormLabel>
-											<FormControl>
-												<Input placeholder="title" {...field} />
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<FormField
-									control={form.control}
-									name="category"
-									render={({ field }) => (
-										<FormItem className="flex flex-col">
-											<FormLabel>Category</FormLabel>
-											<Popover>
-												<PopoverTrigger asChild>
-													<FormControl>
-														<Button
-															variant="outline"
-															role="combobox"
-															className={cn('w-[200px] justify-between', !field.value && 'text-muted-foreground')}
-														>
-															{field.value
-																? categories.find(category => category.value === field.value)?.label
-																: 'Select category'}
-															<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-														</Button>
-													</FormControl>
-												</PopoverTrigger>
-												<PopoverContent className="w-[200px] p-0">
-													<Command>
-														<CommandInput placeholder="Search category..." />
-														<CommandEmpty>No category found.</CommandEmpty>
-														<CommandGroup>
-															<CommandList>
-																{categories.map(category => (
-																	<CommandItem
-																		value={category.label}
-																		key={category.value}
-																		onSelect={() => {
-																			form.setValue('category', category.value);
-																		}}
-																	>
-																		<Check
-																			className={cn(
-																				'mr-2 h-4 w-4',
-																				category.value === field.value ? 'opacity-100' : 'opacity-0',
-																			)}
-																		/>
-																		{category.label}
-																	</CommandItem>
-																))}
-															</CommandList>
-														</CommandGroup>
-													</Command>
-												</PopoverContent>
-											</Popover>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<FormField
-									control={form.control}
-									name="price"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Price</FormLabel>
-											<FormControl>
-												<Input type="number" placeholder="10.00" min={0} step={0.01} {...field} />
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<FormField
-									control={form.control}
-									name="description"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Description</FormLabel>
-											<FormControl>
-												<Textarea placeholder="description" {...field} />
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<FormField
-									control={form.control}
-									name="images"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Images</FormLabel>
-											<FormControl>
-												<UploadDropzone
-													endpoint="imageUploader"
-													config={{ mode: 'auto' }}
-													onClientUploadComplete={files =>
-														form.setValue(
-															'images',
-															files.map(file => file.url),
-														)
-													}
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<FormField
-									control={form.control}
-									name="location"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Location</FormLabel>
-											<FormControl>
-												<Input placeholder="location" {...field} />
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<FormField
-									control={form.control}
-									name="institution"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Institution</FormLabel>
-											<FormControl>
-												<Input placeholder="institution" {...field} />
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<FormField
-									control={form.control}
-									name="condition"
-									render={({ field }) => (
-										<FormItem className="flex flex-col">
-											<FormLabel>Condition</FormLabel>
-											<Popover>
-												<PopoverTrigger asChild>
-													<FormControl>
-														<Button
-															variant="outline"
-															role="combobox"
-															className={cn('w-[200px] justify-between', !field.value && 'text-muted-foreground')}
-														>
-															{field.value
-																? conditions.find(condition => condition.value === field.value)?.label
-																: 'Select condition'}
-															<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-														</Button>
-													</FormControl>
-												</PopoverTrigger>
-												<PopoverContent className="w-[200px] p-0">
-													<Command>
-														<CommandInput placeholder="Search category..." />
-														<CommandEmpty>No Condition found.</CommandEmpty>
-														<CommandGroup>
-															<CommandList>
-																{conditions.map(condition => (
-																	<CommandItem
-																		value={condition.label}
-																		key={condition.value}
-																		onSelect={() => {
-																			form.setValue('condition', condition.value);
-																		}}
-																	>
-																		<Check
-																			className={cn(
-																				'mr-2 h-4 w-4',
-																				condition.value === field.value ? 'opacity-100' : 'opacity-0',
-																			)}
-																		/>
-																		{condition.label}
-																	</CommandItem>
-																))}
-															</CommandList>
-														</CommandGroup>
-													</Command>
-												</PopoverContent>
-											</Popover>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<Button type="submit">Submit</Button>
-							</form>
-						</Form>
+						<div className="m-auto w-[90%]">
+							<h1>Create Listing</h1>
+							<Form {...form}>
+								<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+									<FormField
+										control={form.control}
+										name="title"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Title</FormLabel>
+												<FormControl>
+													<Input placeholder="title" {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="category"
+										render={({ field }) => (
+											<FormItem className="flex flex-col">
+												<FormLabel>Category</FormLabel>
+												<Popover>
+													<PopoverTrigger asChild>
+														<FormControl>
+															<Button
+																variant="outline"
+																role="combobox"
+																className={cn('w-[200px] justify-between', !field.value && 'text-muted-foreground')}
+															>
+																{field.value
+																	? categories.find(category => category.value === field.value)?.label
+																	: 'Select category'}
+																<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+															</Button>
+														</FormControl>
+													</PopoverTrigger>
+													<PopoverContent className="w-[200px] p-0">
+														<Command>
+															<CommandInput placeholder="Search category..." />
+															<CommandEmpty>No category found.</CommandEmpty>
+															<CommandGroup>
+																<CommandList>
+																	{categories.map(category => (
+																		<CommandItem
+																			value={category.label}
+																			key={category.value}
+																			onSelect={() => {
+																				form.setValue('category', category.value);
+																			}}
+																		>
+																			<Check
+																				className={cn(
+																					'mr-2 h-4 w-4',
+																					category.value === field.value ? 'opacity-100' : 'opacity-0',
+																				)}
+																			/>
+																			{category.label}
+																		</CommandItem>
+																	))}
+																</CommandList>
+															</CommandGroup>
+														</Command>
+													</PopoverContent>
+												</Popover>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="price"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Price</FormLabel>
+												<FormControl>
+													<Input type="number" placeholder="10.00" min={0} step={0.01} {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="description"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Description</FormLabel>
+												<FormControl>
+													<Textarea placeholder="description" {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="images"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Images</FormLabel>
+												<FormControl>
+													<UploadDropzone
+														endpoint="imageUploader"
+														config={{ mode: 'auto' }}
+														onClientUploadComplete={files =>
+															form.setValue(
+																'images',
+																files.map(file => file.url),
+															)
+														}
+														{...field}
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="location"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Location</FormLabel>
+												<FormControl>
+													<Input placeholder="location" {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="institution"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Institution</FormLabel>
+												<FormControl>
+													<Input placeholder="institution" {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="condition"
+										render={({ field }) => (
+											<FormItem className="flex flex-col">
+												<FormLabel>Condition</FormLabel>
+												<Popover>
+													<PopoverTrigger asChild>
+														<FormControl>
+															<Button
+																variant="outline"
+																role="combobox"
+																className={cn('w-[200px] justify-between', !field.value && 'text-muted-foreground')}
+															>
+																{field.value
+																	? conditions.find(condition => condition.value === field.value)?.label
+																	: 'Select condition'}
+																<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+															</Button>
+														</FormControl>
+													</PopoverTrigger>
+													<PopoverContent className="w-[200px] p-0">
+														<Command>
+															<CommandInput placeholder="Search category..." />
+															<CommandEmpty>No Condition found.</CommandEmpty>
+															<CommandGroup>
+																<CommandList>
+																	{conditions.map(condition => (
+																		<CommandItem
+																			value={condition.label}
+																			key={condition.value}
+																			onSelect={() => {
+																				form.setValue('condition', condition.value);
+																			}}
+																		>
+																			<Check
+																				className={cn(
+																					'mr-2 h-4 w-4',
+																					condition.value === field.value ? 'opacity-100' : 'opacity-0',
+																				)}
+																			/>
+																			{condition.label}
+																		</CommandItem>
+																	))}
+																</CommandList>
+															</CommandGroup>
+														</Command>
+													</PopoverContent>
+												</Popover>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<Button type="submit">Submit</Button>
+								</form>
+							</Form>
+						</div>
 						<Footer />
 					</div>
 				</div>
