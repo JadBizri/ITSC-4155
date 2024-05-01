@@ -11,7 +11,6 @@ interface Tile {
 		price: string;
 		title: string;
 	};
-	sellerAd: {};
 	tileType: string;
 	__typename: string;
 }
@@ -19,8 +18,6 @@ interface Tile {
 export interface ModularFeedResponse {
 	data: {
 		modularFeed: {
-			categoryInfo: {};
-			feedAdditions: {};
 			filters: [];
 			legacyFeedOptions: [];
 			looseTiles: Tile[];

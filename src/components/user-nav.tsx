@@ -34,7 +34,7 @@ export function UserNav(sessionData: Session) {
 					</Link>
 				</DropdownMenuItem>
 				<DropdownMenuItem>
-					<Link className="inline-flex items-center" href="#">
+					<Link className="inline-flex items-center" href="/settings">
 						<Settings className="mr-4 h-4 w-4" />
 						Settings
 					</Link>
