@@ -83,6 +83,8 @@ model User {
     email         String?    @unique
     emailVerified DateTime?
     image         String?
+    phone         String?
+    phoneVerified DateTime?
     accounts      Account[]
     sessions      Session[]
     items         Item[]

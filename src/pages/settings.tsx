@@ -1,0 +1,103 @@
+import { useSession } from 'next-auth/react';
+import { SiteHeader } from '~/components/site-header';
+import Head from 'next/head';
+import router from 'next/router';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '~/components/ui/card';
+import React from 'react';
+import { ProfileImage } from '~/components/ui/profile-img';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
+import { Input } from '~/components/ui/input';
+import { Button } from '~/components/ui/button';
+import { PatternFormat } from 'react-number-format';
+import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '~/components/ui/input-otp';
+
+export default function Profile() {
+	const { data: sessionData } = useSession();
+
+	if (!sessionData) {
+		return (
+			<>
+				<Head>
+					<title>Unauthorized Access</title>
+					<meta name="error" content="Error" />
+					<link rel="icon" href="/favicon.ico" />
+				</Head>
+				<div className="relative flex min-h-screen flex-col bg-white dark:bg-zinc-950">
+					<SiteHeader />
+					<h1 className="m-auto text-center text-4xl">
+						Unauthorized Access: You need to be signed in to view this page
+					</h1>
+				</div>
+			</>
+		);
+	} else {
+		return (
+			<>
+				<Head>
+					<title>FlipMart Profile</title>
+					<meta name="description" content="Profile page" />
+					<link rel="icon" href="/favicon.ico" />
+				</Head>
+				<div className="relative flex min-h-screen flex-col bg-white dark:bg-zinc-950">
+					<SiteHeader />
+					<div className="mt-8 flex flex-col items-center space-y-10 text-center">
+						<div className="flex flex-col items-center">
+							{sessionData.user.image && <ProfileImage imageUrl={sessionData.user.image} size="100px" />}
+							<h1 className="mt-3 text-4xl">Profile Settings</h1>
+							<div className="m-10 flex w-[80%]">
+								<Tabs defaultValue="account" className="w-[400px]">
+									<TabsList className="grid w-full grid-cols-1">
+										<TabsTrigger value="account">Account</TabsTrigger>
+									</TabsList>
+									<TabsContent value="account">
+										<Card>
+											<CardHeader>
+												<CardTitle>Phone Number</CardTitle>
+												<CardDescription>Add a phone number to your account here and verify it.</CardDescription>
+											</CardHeader>
+											<CardContent className="space-y-2">
+												<div className="space-y-1">
+													<PatternFormat
+														format="+1 (###) ### ####"
+														allowEmptyFormatting
+														placeholder="(555) 555 5555"
+														customInput={Input}
+													/>
+												</div>
+											</CardContent>
+											<CardFooter>
+												<Popover>
+													<PopoverTrigger asChild>
+														<Button variant="outline" className="m-auto">
+															Send Verification Code
+														</Button>
+													</PopoverTrigger>
+													<PopoverContent className="w-80">
+														<InputOTP maxLength={6}>
+															<InputOTPGroup>
+																<InputOTPSlot index={0} />
+																<InputOTPSlot index={1} />
+																<InputOTPSlot index={2} />
+															</InputOTPGroup>
+															<InputOTPSeparator />
+															<InputOTPGroup>
+																<InputOTPSlot index={3} />
+																<InputOTPSlot index={4} />
+																<InputOTPSlot index={5} />
+															</InputOTPGroup>
+														</InputOTP>
+													</PopoverContent>
+												</Popover>
+											</CardFooter>
+										</Card>
+									</TabsContent>
+								</Tabs>
+							</div>
+						</div>
+					</div>
+				</div>
+			</>
+		);
+	}
+}
