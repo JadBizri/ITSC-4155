@@ -25,7 +25,7 @@ const products = response
 			location: '28223',
 			institution: 'UNC Charlotte',
 			slug: `${product.title.toLowerCase().replace(/ /g, '-')}-${rand(9)}`,
-			condition: 'good',
+			condition: 'GOOD',
 			createdById: 'cltxhhv0e0002ya6lqtp1aylt',
 		} as Prisma.ItemCreateManyInput;
 	});
