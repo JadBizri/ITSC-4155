@@ -13,8 +13,19 @@ import { Button } from '~/components/ui/button';
 import { PatternFormat } from 'react-number-format';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '~/components/ui/input-otp';
-import otpVerify from './api/otp/otpVerify';
 import { api } from '~/utils/api';
+import { formatPhoneNumber } from '~/lib/utils';
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from '~/components/ui/alert-dialog';
 
 export default function Profile() {
 	const mutation = api.user.verifyUser.useMutation();
@@ -23,9 +34,34 @@ export default function Profile() {
 	const [phoneNumber, setPhoneNumber] = useState('');
 	const [otpCode, setOtpCode] = useState('');
 	const [otpSent, setOtpSent] = useState(false);
+	const [failOtpSent, setFailOtpSent] = useState('');
 	const [phoneVerified, setPhoneVerified] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [feedbackMessage, setFeedbackMessage] = useState('');
+	const [updatePhone, setUpdatePhone] = useState('Send Verification Code');
+	const [cardDescription, setCardDescription] = useState('Add a phone number to your account here and verify it.');
+	const [shouldReload, setShouldReload] = useState(false);
+
+	const user = api.user.getUser.useQuery();
+
+	useEffect(() => {
+		if (user.data?.phoneVerified) {
+			setUpdatePhone('Update');
+			setCardDescription('Update Phone Number');
+		}
+		const handlePageClick = () => {
+			if (shouldReload) {
+				window.location.reload(); // or you can use router.reload() if you want to use Next.js routing
+			}
+		};
+
+		if (shouldReload) {
+			document.addEventListener('click', handlePageClick);
+		}
+
+		return () => {
+			document.removeEventListener('click', handlePageClick);
+		};
+	}, [user.data?.phoneVerified, shouldReload]);
 
 	if (!sessionData) {
 		return (
@@ -52,11 +88,17 @@ export default function Profile() {
 				setOtpSent(true);
 			} else {
 				setOtpSent(false);
+				setFailOtpSent('Fail to send OTP...please try again later.');
 			}
 			setOtpSent(true);
 		} catch (error) {
 			setOtpSent(false);
 			console.log(error);
+			if (phoneNumber === '') {
+				setFailOtpSent('Enter phone number and try again.');
+			} else {
+				setFailOtpSent('Fail to send OTP...please try again later.');
+			}
 		} finally {
 			setLoading(false);
 		}
@@ -69,11 +111,14 @@ export default function Profile() {
 			if (response.status === 200) {
 				setPhoneVerified(true);
 				await mutation.mutateAsync({ phone: phoneNumber, phoneVerified: new Date() });
+				setShouldReload(true);
 			} else {
 				setPhoneVerified(false);
+				setShouldReload(false);
 			}
 		} catch (error) {
 			setPhoneVerified(false);
+			setShouldReload(false);
 			console.log(error);
 		} finally {
 			setLoading(false);
@@ -82,6 +127,7 @@ export default function Profile() {
 	const handleOtpChange = async (otp: string) => {
 		setOtpCode(otp);
 	};
+
 	return (
 		<>
 			<Head>
@@ -104,14 +150,13 @@ export default function Profile() {
 									<Card>
 										<CardHeader>
 											<CardTitle>Phone Number</CardTitle>
-											<CardDescription>Add a phone number to your account here and verify it.</CardDescription>
+											<CardDescription>{cardDescription}</CardDescription>
 										</CardHeader>
 										<CardContent className="space-y-2">
 											<div className="space-y-1">
 												<PatternFormat
-													format="+1 (###) ### ####"
-													allowEmptyFormatting
-													placeholder="(555) 555 5555"
+													format="+1 (###) ### - ####"
+													placeholder={formatPhoneNumber(user.data?.phone ?? '1234567890') ?? '+1 (123) 456 - 7890'}
 													customInput={Input}
 													onValueChange={values => setPhoneNumber(values.value)}
 												/>
@@ -121,7 +166,7 @@ export default function Profile() {
 											<Popover>
 												<PopoverTrigger asChild>
 													<Button onClick={handleSendOTP} variant="outline" className="m-auto">
-														Send Verification Code
+														{updatePhone}
 													</Button>
 												</PopoverTrigger>
 												<div className="flex flex-col items-center justify-center">
@@ -167,11 +212,7 @@ export default function Profile() {
 														</PopoverContent>
 													) : (
 														<PopoverContent>
-															{loading ? (
-																<p>Sending...</p>
-															) : (
-																<p className="text-red-500">Fail to send OTP...please try again later.</p>
-															)}
+															{loading ? <p>Sending...</p> : <p className="text-red-500">{failOtpSent}</p>}
 														</PopoverContent>
 													)}
 												</div>
