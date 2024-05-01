@@ -13,6 +13,8 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
+import { DeleteItem } from '~/components/delete-item';
+import Link from 'next/link';
 
 const formSchema = z.object({
 	price: z.coerce.number().positive().safe(),
@@ -54,6 +56,7 @@ export default function ProductPage() {
 			});
 		}
 	}
+
 	return (
 		<>
 			<Head>
@@ -102,7 +105,16 @@ export default function ProductPage() {
 								</Form>
 							</div>
 						) : (
-							<></>
+							sessionData &&
+							item.data &&
+							sessionData.user.id == item.data.createdBy.id && (
+								<div className="mt-3 flex items-center gap-2">
+									<DeleteItem id={item.data.id} redirect />
+									<Link href={`/product/${item.data.slug}/edit`}>
+										<Button variant="secondary">Edit</Button>
+									</Link>
+								</div>
+							)
 						)}
 						{!item.data?.Active ? <p className="mt-3 text-red-500">This item is no longer available</p> : <></>}
 						<p className="leading-7 [&:not(:first-child)]:mt-6">${item.data?.price}</p>
