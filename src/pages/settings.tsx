@@ -47,18 +47,15 @@ export default function Profile() {
 	const handleSendOTP = async () => {
 		setLoading(true);
 		try {
-			//console.log(phoneNumber);
-			// const response = await axios.post('/api/otp/otpSend', { phoneNumber });
-			// //console.log(response);
-			// if (response.status === 200) {
-			// 	setOtpSent(true);
-			// } else {
-			// 	setOtpSent(false);
-			// }
+			const response = await axios.post('/api/otp/otpSend', { phoneNumber });
+			if (response.status === 200) {
+				setOtpSent(true);
+			} else {
+				setOtpSent(false);
+			}
 			setOtpSent(true);
 		} catch (error) {
 			setOtpSent(false);
-			//alert('Failed to send OTP');
 		} finally {
 			setLoading(false);
 		}
@@ -67,36 +64,21 @@ export default function Profile() {
 	const handleVerifyOTP = async () => {
 		setLoading(true);
 		try {
-			//console.log(otpCode);
-			// const response = await axios.post('/api/otp/otpVerify', { phoneNumber, otpCode });
-			// if (response.status === 200) {
-			// 	setPhoneVerified(true);
-			// 	setFeedbackMessage('Phone number verified successfully!');
-			// 	//console.log(response)
-			// 	//const now = new Date();
-			// 	// await prisma.user.update({
-			// 	// 	where: { id: sessionData.user.id },
-			// 	// 	data: {
-			// 	// 		phone: phoneNumber,
-			// 	// 		phoneVerified: now
-			// 	// 	}
-			// 	// });
-			// 	//console.log(prismaResp);
-			// } else {
-			// 	setPhoneVerified(false);
-			// 	setFeedbackMessage('Verification failed. Please try again.');
-			// }
-			setPhoneVerified(true);
+			const response = await axios.post('/api/otp/otpVerify', { phoneNumber, otpCode });
+			if (response.status === 200) {
+				setPhoneVerified(true);
+				//**TODO** add phone into database
+			} else {
+				setPhoneVerified(false);
+			}
 		} catch (error) {
 			setPhoneVerified(false);
-			setFeedbackMessage('Verification failed. Please try again.');
 		} finally {
 			setLoading(false);
 		}
 	};
 	const handleOtpChange = async (otp: string) => {
 		setOtpCode(otp);
-		//console.log(otp);
 	};
 	return (
 		<>
