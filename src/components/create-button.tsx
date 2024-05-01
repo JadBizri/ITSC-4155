@@ -3,7 +3,7 @@
 import router from 'next/router';
 import * as React from 'react';
 import { useState } from 'react';
-import { Button } from './ui/button'; // Import from your component library
+import { Button } from './ui/button';
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -23,14 +23,14 @@ export function CreateButton() {
 
 	const handleCreateClick = () => {
 		if (user.data?.phoneVerified) {
-			void router.push('/create'); // If phone is verified, navigate to create page
+			void router.push('/create');
 		} else {
-			setDialogOpen(true); // If not verified, open the alert dialog
+			setDialogOpen(true);
 		}
 	};
 
 	const handleConfirm = () => {
-		void router.push('/settings'); // Redirect to settings page for phone verification
+		void router.push('/settings');
 	};
 	//return <Button onClick={() => router.push('/create')}>Create an Item</Button>;
 	return (

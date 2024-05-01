@@ -50,7 +50,7 @@ export default function Profile() {
 		}
 		const handlePageClick = () => {
 			if (shouldReload) {
-				window.location.reload(); // or you can use router.reload() if you want to use Next.js routing
+				router.reload();
 			}
 		};
 
