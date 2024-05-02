@@ -14,16 +14,39 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
+model Item {
+    id           Int       @id @default(autoincrement())
+    title        String
+    slug         String    @unique
+    category     Category
+    price        Float
+    description  String
+    images       String[]
+    location     Location
+    condition    Condition
+    createdAt    DateTime  @default(now())
+    updatedAt    DateTime  @updatedAt
+    visits       Int       @default(0)
+    UniqueVisits Int       @default(0)
+    Active       Boolean   @default(true)
+
+    createdBy   User       @relation(fields: [createdById], references: [id], onDelete: Cascade)
+    createdById String
+    Comments    Comments[]
+    offers      Offer[]
+
+    @@index([title])
+}
+
+model Comments {
     id        Int      @id @default(autoincrement())
-    name      String
+    text      String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
+    author    User     @relation(fields: [authorId], references: [id])
+    authorId  String
+    item      Item     @relation(fields: [itemId], references: [id])
+    itemId    Int
 }
 
 // Necessary for Next auth
@@ -54,14 +77,28 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String     @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?    @unique
     emailVerified DateTime?
     image         String?
+    phone         String?    @unique
+    phoneVerified DateTime?
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
+    items         Item[]
+    Comments      Comments[]
+    offers        Offer[]
+}
+
+model Offer {
+    id      Int    @id @default(autoincrement())
+    price   Float
+    buyerId String
+    itemId  Int
+    status  Status @default(PENDING)
+    item    Item   @relation(fields: [itemId], references: [id])
+    buyer   User   @relation(fields: [buyerId], references: [id])
 }
 
 model VerificationToken {
@@ -70,4 +107,55 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+enum Category {
+    TEXTBOOKS
+    ELECTRONICS
+    CLOTHING
+    ESSENTIALS
+    FURNITURE
+    OTHER
+}
+
+enum Condition {
+    NEW
+    LIKE_NEW
+    GOOD
+    FAIR
+    POOR
+}
+
+enum Status {
+    PENDING
+    ACCEPTED
+    REJECTED
+}
+
+enum Location {
+    STUDENT_UNION
+    ATKINS_LIBRARY
+    WOODWARD
+    UREC
+    CONE_BUILDING
+    STAR_QUAD
+    BELK_HALL
+    ELM_HALL
+    GREEK_VILLAGE
+    HAWTHORN_HALL
+    HICKORY_CEDAR_HALL
+    HOLSHOUSER_HALL
+    HUNT_HALL
+    LAUREL_HALL
+    LEVINE_HALL
+    LYNCH_HALL
+    MARTIN_HALL
+    MILTIMORE_HALL
+    OAK_HALL
+    PINE_HALL
+    SANFORD_HALL
+    SCOTT_HALL
+    WALLIS_HALL
+    WILSON_HALL
+    WITHERSPOON_HALL
 }
