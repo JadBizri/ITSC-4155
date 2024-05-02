@@ -17,6 +17,7 @@ import Head from 'next/head';
 import { DeleteItem } from '~/components/delete-item';
 import Link from 'next/link';
 import { formatCondition, formatLocation } from '~/lib/utils';
+import axios from 'axios';
 
 const formSchema = z.object({
 	price: z.coerce.number().positive().safe(),
@@ -28,11 +29,22 @@ export default function ProductPage() {
 	const item = api.item.getItemSlug.useQuery(query.slug as string);
 	const { data: sessionData } = useSession();
 	const { data: session } = useSession();
+	const newPhone = api.user.getUserPhonebyId.useQuery(item.data?.createdById ?? '');
 
 	const handleMessageOwner = async () => {
 		if (session && item.data?.createdById) {
 			const chatUrl = `/chat/${item.data.createdById}/${session.user.id}?ownerName=${encodeURIComponent(item.data?.createdBy?.name ?? '')}&userName=${encodeURIComponent(session.user.name ?? '')}`;
 			await router.push(chatUrl);
+			try {
+				if (newPhone) {
+					const response = await axios.post('/api/otp/phoneNotify', {
+						phoneNumber: newPhone.data?.phone,
+						notifyType: 'newMessage',
+					});
+				}
+			} catch (error) {
+				console.log(error);
+			}
 		} else {
 			console.error('Session is null, cannot handle message owner.');
 		}
