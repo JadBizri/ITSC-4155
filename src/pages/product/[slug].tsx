@@ -118,7 +118,7 @@ export default function ProductPage() {
 					<div>
 						<h1 className="scroll-m-20 text-4xl font-bold tracking-tight lg:text-5xl">{item.data?.title}</h1>
 
-						{sessionData && sessionData.user.id !== item.data?.createdBy.id ? (
+						{sessionData && sessionData.user.id !== item.data?.createdBy.id && item.data?.Active ? (
 							<div className="mt-3 flex items-center">
 								<Form {...form}>
 									<FormItem>
