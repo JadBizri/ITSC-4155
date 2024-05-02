@@ -19,4 +19,8 @@ export const userRouter = createTRPCRouter({
 	getUser: protectedProcedure.query(async ({ ctx }) => {
 		return ctx.db.user.findUnique({ where: { id: ctx.session.user.id } });
 	}),
+	getUserNameById: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+		const user = await ctx.db.user.findUnique({ where: { id: input } });
+		return { name: user?.name };
+	}),
 });

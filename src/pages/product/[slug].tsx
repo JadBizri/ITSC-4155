@@ -32,7 +32,8 @@ export default function ProductPage() {
 
 	const handleMessageOwner = async () => {
 		if (session && item.data?.createdById) {
-			await router.push(`/chat/${item.data.createdById}/${session.user.id}`);
+			const chatUrl = `/chat/${item.data.createdById}/${session.user.id}?ownerName=${encodeURIComponent(item.data?.createdBy?.name ?? '')}&userName=${encodeURIComponent(session.user.name ?? '')}`;
+			await router.push(chatUrl);
 		} else {
 			console.error('Session is null, cannot handle message owner.');
 		}
