@@ -13,7 +13,7 @@ const phoneNotify = async (req: NextApiRequest, res: NextApiResponse) => {
 			messageBody = 'FlipMart - A new buyer sent you a message on your listing.';
 			break;
 		case 'newOffer':
-			messageBody = 'FlipMart - You have recieved a new Offer on your listing.';
+			messageBody = 'FlipMart - You have received a new Offer on your listing.';
 			break;
 		default:
 			messageBody = 'FlipMart - There is something exciting waiting for you. Visit now!';
