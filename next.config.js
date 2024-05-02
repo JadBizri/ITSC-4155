@@ -64,6 +64,46 @@ const config = {
 				protocol: 'https',
 				hostname: 'utfs.io',
 			},
+			{
+				protocol: 'https',
+				hostname: 'm.media-amazon.com',
+			},
+			{
+				protocol: 'https',
+				hostname: 'www.pngkey.com',
+			},
+			{
+				protocol: 'https',
+				hostname: 'img01.ztat.net',
+			},
+			{
+				protocol: 'https',
+				hostname: 'storage.googleapis.com',
+			},
+			{
+				protocol: 'https',
+				hostname: 'www.tradeinn.com',
+			},
+			{
+				protocol: 'https',
+				hostname: 'www.avisualpro.es',
+			},
+			{
+				protocol: 'https',
+				hostname: 'www.markamania.es',
+			},
+			{
+				protocol: 'https',
+				hostname: 'www.bambinodoggies.com',
+			},
+			{
+				protocol: 'https',
+				hostname: 'tinyjpg.com',
+			},
+			{
+				protocol: 'https',
+				hostname: 'www.slikomania.rs',
+			},
 		],
 	},
 };
