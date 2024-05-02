@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import db from '~/lib/firebase';
 import { sendMessage } from '~/services/firebaseServiceWithId';
-import { useSession } from 'next-auth/react';
+import { api } from '~/utils/api';
 
 interface Props {
 	userId: string;
@@ -11,7 +11,10 @@ interface Props {
 
 function ChatComponentWithId({ userId, otherUserId }: Props) {
 	const [message, setMessage] = useState('');
-	const [messages, setMessages] = useState<{ id: string; text: string }[]>([]);
+	const [messages, setMessages] = useState<{ id: string; text: string; receiverId: string; senderId: string }[]>([]);
+
+	const userName = api.user.getUserNameById.useQuery(userId);
+	const otherName = api.user.getUserNameById.useQuery(otherUserId);
 
 	// Create a consistent conversation ID
 	const conversationId = [userId, otherUserId].sort().join('-');
@@ -23,11 +26,12 @@ function ChatComponentWithId({ userId, otherUserId }: Props) {
 		}
 
 		const messagesCollection = query(collection(db, `conversations/${conversationId}/messages`), orderBy('createdAt'));
-
 		const unsubscribe = onSnapshot(messagesCollection, snapshot => {
 			const loadedMessages = snapshot.docs.map(doc => ({
 				id: doc.id,
 				text: doc.data().text as string,
+				receiverId: doc.data().receiverId as string,
+				senderId: doc.data().senderId as string,
 			}));
 			setMessages(loadedMessages);
 		});
@@ -35,36 +39,45 @@ function ChatComponentWithId({ userId, otherUserId }: Props) {
 		return () => unsubscribe();
 	}, [userId, otherUserId, conversationId]);
 
-	const handleSendMessage = async () => {
+	const handleSendMessage = useCallback(async () => {
 		if (message.trim() !== '' && userId && otherUserId) {
 			await sendMessage(message, userId, otherUserId, conversationId);
 			setMessage('');
 		} else {
 			console.error('Cannot send an empty message or missing user IDs.');
 		}
-	};
+	}, [message, userId, otherUserId, conversationId]);
 
 	return (
-		<div className="rounded-lg bg-gray-800 p-4 shadow">
-			<input
-				value={message}
-				onChange={e => setMessage(e.target.value)}
-				className="mb-4 w-full rounded-lg bg-white p-2 text-gray-900"
-				placeholder="Type a message..."
-			/>
-			<button
-				onClick={handleSendMessage}
-				className="rounded bg-gray-700 px-4 py-2 text-white transition duration-150 hover:bg-gray-600"
-			>
-				Send
-			</button>
-			<ul className="mt-4 space-y-2">
+		<div className=" mx-auto rounded-lg  p-4 shadow-lg">
+			<ul className="h-64 space-y-2 overflow-y-auto p-2">
 				{messages.map(msg => (
-					<li key={msg.id} className="rounded bg-gray-700 p-2 text-white">
-						{msg.text}
+					<li
+						key={msg.id}
+						className={`rounded-lg p-3 text-gray-900 ${msg.senderId === userId ? 'ml-auto bg-gray-100' : 'mr-auto bg-gray-300'}`}
+					>
+						<div className="text-sm font-semibold">
+							{msg.senderId === userId ? userName.data?.name : otherName.data?.name}
+						</div>
+						<div className="text-lg">{msg.text}</div>
 					</li>
 				))}
 			</ul>
+			<div className="mt-4 flex">
+				<input
+					value={message}
+					onChange={e => setMessage(e.target.value)}
+					className="flex-grow rounded-lg bg-gray-100 p-2 text-gray-900"
+					placeholder="Type a message..."
+					aria-label="Type a message"
+				/>
+				<button
+					onClick={handleSendMessage}
+					className="ml-2 rounded bg-gray-800 px-4 py-2 text-white transition duration-150 hover:bg-gray-700"
+				>
+					Send
+				</button>
+			</div>
 		</div>
 	);
 }

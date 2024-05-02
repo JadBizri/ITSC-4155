@@ -3,11 +3,18 @@ import { ArrowLeftIcon } from '@heroicons/react/20/solid';
 import ChatComponentWithConvoId from '~/components/chatComponentWithConvoId';
 import { useSession } from 'next-auth/react';
 import { SiteHeader } from '~/components/site-header';
+import { api } from '~/utils/api';
 
 const ConversationPage = () => {
 	const router = useRouter();
 	const { id } = router.query;
 	const { data: session, status } = useSession();
+
+	const userID = (id as string)?.split('-')[0] || '';
+	const otherUserID = (id as string)?.split('-')[1];
+
+	const sessionUserName = api.user.getUserNameById.useQuery(userID);
+	const otherName = api.user.getUserNameById.useQuery(otherUserID as string);
 
 	const goToChatOverview = () => {
 		router.push('/chatOverview');
@@ -30,6 +37,10 @@ const ConversationPage = () => {
 			{session ? (
 				id && typeof id === 'string' ? (
 					<div>
+						<div className="mb-6 rounded-lg bg-white p-4 shadow">
+							<h1 className="text-xl font-semibold text-gray-800">Chat with: {otherName.data?.name}</h1>
+							<p className="text-gray-600">Chatting as: {sessionUserName.data?.name}</p>
+						</div>
 						<ChatComponentWithConvoId conversationId={id} />
 					</div>
 				) : (
