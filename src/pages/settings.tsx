@@ -83,14 +83,18 @@ export default function Profile() {
 	const handleSendOTP = async () => {
 		setLoading(true);
 		try {
-			const response = await axios.post('/api/otp/otpSend', { phoneNumber });
-			if (response.status === 200) {
-				setOtpSent(true);
-			} else {
-				setOtpSent(false);
-				setFailOtpSent('Fail to send OTP...please try again later.');
+			let response;
+			if (!otpSent) {
+				response = await axios.post('/api/otp/otpSend', { phoneNumber });
+				if (response.status === 200) {
+					setOtpSent(true);
+				} else {
+					setOtpSent(false);
+					setFailOtpSent('Fail to send OTP...please try again later.');
+				}
 			}
-			setOtpSent(true);
+			console.log(response);
+			// setOtpSent(true);
 		} catch (error) {
 			setOtpSent(false);
 			console.log(error);
@@ -109,8 +113,8 @@ export default function Profile() {
 		try {
 			const response = await axios.post('/api/otp/otpVerify', { phoneNumber, otpCode });
 			if (response.status === 200) {
-				setPhoneVerified(true);
 				await mutation.mutateAsync({ phone: phoneNumber, phoneVerified: new Date() });
+				setPhoneVerified(true);
 				setShouldReload(true);
 			} else {
 				setPhoneVerified(false);
@@ -164,11 +168,13 @@ export default function Profile() {
 										</CardContent>
 										<CardFooter>
 											<Popover>
-												<PopoverTrigger asChild>
-													<Button onClick={handleSendOTP} variant="outline" className="m-auto">
-														{updatePhone}
-													</Button>
-												</PopoverTrigger>
+												{!phoneVerified && (
+													<PopoverTrigger asChild>
+														<Button onClick={handleSendOTP} variant="outline" className="m-auto">
+															{updatePhone}
+														</Button>
+													</PopoverTrigger>
+												)}
 												<div className="flex flex-col items-center justify-center">
 													{otpSent ? (
 														<PopoverContent className="w-80">
@@ -199,21 +205,25 @@ export default function Profile() {
 																		</Button>
 																	</PopoverTrigger>
 																	<PopoverContent>
-																		{loading ? (
-																			<p>Verifying...</p>
-																		) : phoneVerified ? (
-																			<p className="text-green-500">Phone number has been added and verified!</p>
-																		) : (
-																			<p className="text-red-500">Fail to verify phone number</p>
-																		)}
+																		<div className="flex flex-col items-center justify-center">
+																			{loading ? (
+																				<p>Verifying...</p>
+																			) : phoneVerified ? (
+																				<p className="text-green-500">Phone number has been added and verified!</p>
+																			) : (
+																				<p className="text-red-500">Fail to verify phone number</p>
+																			)}
+																		</div>
 																	</PopoverContent>
 																</Popover>
 															</div>
 														</PopoverContent>
 													) : (
-														<PopoverContent>
-															{loading ? <p>Sending...</p> : <p className="text-red-500">{failOtpSent}</p>}
-														</PopoverContent>
+														<div className="flex flex-col items-center justify-center">
+															<PopoverContent>
+																{loading ? <p>Sending...</p> : <p className="text-red-500">{failOtpSent}</p>}
+															</PopoverContent>
+														</div>
 													)}
 												</div>
 											</Popover>
