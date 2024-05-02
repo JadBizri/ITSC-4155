@@ -37,9 +37,10 @@ function ChatComponentWithConvoId({ conversationId }: Props) {
 			});
 
 			const conversationRef = doc(db, `conversations/${conversationId}`);
-			getDoc(conversationRef).then(docSnapshot => {
+			void getDoc(conversationRef).then(docSnapshot => {
 				const data = docSnapshot.data();
 				if (data && session?.user?.id) {
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
 					const otherId = data.participants.find((id: string) => id !== session.user.id) as string;
 					setOtherUserId(otherId ?? null);
 				}

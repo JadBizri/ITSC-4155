@@ -1,23 +1,23 @@
 import { useRouter } from 'next/router';
-import { ArrowLeftIcon } from '@heroicons/react/20/solid';
 import ChatComponentWithConvoId from '~/components/chatComponentWithConvoId';
 import { useSession } from 'next-auth/react';
 import { SiteHeader } from '~/components/site-header';
 import { api } from '~/utils/api';
+import { ChevronRight } from 'lucide-react';
 
 const ConversationPage = () => {
 	const router = useRouter();
 	const { id } = router.query;
 	const { data: session, status } = useSession();
 
-	const userID = (id as string)?.split('-')[0] || '';
+	const userID = (id as string)?.split('-')[0] ?? '';
 	const otherUserID = (id as string)?.split('-')[1];
 
 	const sessionUserName = api.user.getUserNameById.useQuery(userID);
-	const otherName = api.user.getUserNameById.useQuery(otherUserID as string);
+	const otherName = api.user.getUserNameById.useQuery(otherUserID!);
 
-	const goToChatOverview = () => {
-		router.push('/chatOverview');
+	const goToChatOverview = async () => {
+		await router.push('/chatOverview');
 	};
 
 	return (
@@ -29,7 +29,7 @@ const ConversationPage = () => {
 						onClick={goToChatOverview}
 						className="mr-2 flex items-center rounded bg-gray-500 px-4 py-2 text-white"
 					>
-						<ArrowLeftIcon className="mr-1 h-5 w-5" /> Back To Messages
+						<ChevronRight className="mr-1 h-5 w-5" /> Back To Messages
 					</button>
 				</div>
 			)}
