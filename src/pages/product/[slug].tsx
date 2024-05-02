@@ -17,6 +17,7 @@ import { useSession, signIn } from 'next-auth/react';
 import Head from 'next/head';
 import { DeleteItem } from '~/components/delete-item';
 import Link from 'next/link';
+import { formatCondition, formatLocation } from '~/lib/utils';
 
 const formSchema = z.object({
 	price: z.coerce.number().positive().safe(),
@@ -142,17 +143,13 @@ export default function ProductPage() {
 								<AccordionTrigger>Description</AccordionTrigger>
 								<AccordionContent>{item.data?.description}</AccordionContent>
 							</AccordionItem>
-							<AccordionItem value="institution">
-								<AccordionTrigger>Institution</AccordionTrigger>
-								<AccordionContent>{item.data?.institution}</AccordionContent>
-							</AccordionItem>
 							<AccordionItem value="location">
 								<AccordionTrigger>Location</AccordionTrigger>
-								<AccordionContent>{item.data?.location}</AccordionContent>
+								<AccordionContent>{formatLocation(item.data!.location)}</AccordionContent>
 							</AccordionItem>
 							<AccordionItem value="condition">
 								<AccordionTrigger>Condition</AccordionTrigger>
-								<AccordionContent>{item.data?.condition}</AccordionContent>
+								<AccordionContent>{formatCondition(item.data!.condition)}</AccordionContent>
 							</AccordionItem>
 						</Accordion>
 					</div>

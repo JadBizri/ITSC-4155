@@ -57,7 +57,6 @@ export default function Home() {
 									description: 'Description not available',
 									images: [tile.listing.image.url],
 									location: tile.listing.locationName,
-									institution: 'OfferUp',
 									condition: 'GOOD',
 									createdAt: new Date(),
 									updatedAt: new Date(),
