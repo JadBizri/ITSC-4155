@@ -3,6 +3,7 @@ import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import db from '~/lib/firebase';
 import { sendMessage } from '~/services/firebaseServiceWithId';
 import { api } from '~/utils/api';
+import axios from 'axios';
 
 interface Props {
 	userId: string;
@@ -43,6 +44,18 @@ function ChatComponentWithId({ userId, otherUserId }: Props) {
 		if (message.trim() !== '' && userId && otherUserId) {
 			await sendMessage(message, userId, otherUserId, conversationId);
 			setMessage('');
+			const newPhone = api.user.getUserPhonebyId.useQuery(otherUserId ?? '');
+			try {
+				if (newPhone) {
+					const response = await axios.post('/api/otp/phoneNotify', {
+						phoneNumber: newPhone.data?.phone,
+						notifyType: 'newMessage',
+					});
+					console.log('send phone notify');
+				}
+			} catch (error) {
+				console.log(error);
+			}
 		} else {
 			console.error('Cannot send an empty message or missing user IDs.');
 		}

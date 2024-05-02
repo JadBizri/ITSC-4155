@@ -4,6 +4,7 @@ import db from '~/lib/firebase';
 import { sendMessage } from '~/services/firebaseServiceWithId';
 import { useSession } from 'next-auth/react';
 import { api } from '~/utils/api';
+import axios from 'axios';
 
 interface Props {
 	conversationId: string;
@@ -54,6 +55,18 @@ function ChatComponentWithConvoId({ conversationId }: Props) {
 		if (message.trim() !== '' && session?.user?.id && otherUserId) {
 			await sendMessage(message, session.user.id, otherUserId, conversationId);
 			setMessage('');
+			const newPhone = api.user.getUserPhonebyId.useQuery(otherUserId ?? '');
+			try {
+				if (newPhone) {
+					const response = await axios.post('/api/otp/phoneNotify', {
+						phoneNumber: newPhone.data?.phone,
+						notifyType: 'newMessage',
+					});
+					console.log('send phone notify');
+				}
+			} catch (error) {
+				console.log(error);
+			}
 		} else {
 			console.error('Cannot send an empty message or missing user IDs.');
 		}

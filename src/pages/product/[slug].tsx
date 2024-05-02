@@ -39,8 +39,9 @@ export default function ProductPage() {
 				if (newPhone) {
 					const response = await axios.post('/api/otp/phoneNotify', {
 						phoneNumber: newPhone.data?.phone,
-						notifyType: 'newMessage',
+						notifyType: 'newNewMessage',
 					});
+					console.log('send phone notify');
 				}
 			} catch (error) {
 				console.log(error);
@@ -72,6 +73,13 @@ export default function ProductPage() {
 					buyer: sessionData?.user.id,
 				});
 				form.reset();
+				if (newPhone) {
+					const response = await axios.post('/api/otp/phoneNotify', {
+						phoneNumber: newPhone.data?.phone,
+						notifyType: 'newOffer',
+					});
+					console.log('send phone notify');
+				}
 				await router.push('/profile');
 			}
 		} else {
