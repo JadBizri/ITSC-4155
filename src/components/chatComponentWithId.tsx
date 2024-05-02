@@ -16,6 +16,7 @@ function ChatComponentWithId({ userId, otherUserId }: Props) {
 
 	const userName = api.user.getUserNameById.useQuery(userId);
 	const otherName = api.user.getUserNameById.useQuery(otherUserId);
+	const newPhone = api.user.getUserPhonebyId.useQuery(otherUserId ?? '');
 
 	// Create a consistent conversation ID
 	const conversationId = [userId, otherUserId].sort().join('-');
@@ -44,7 +45,6 @@ function ChatComponentWithId({ userId, otherUserId }: Props) {
 		if (message.trim() !== '' && userId && otherUserId) {
 			await sendMessage(message, userId, otherUserId, conversationId);
 			setMessage('');
-			const newPhone = api.user.getUserPhonebyId.useQuery(otherUserId ?? '');
 			try {
 				if (newPhone) {
 					const response = await axios.post('/api/otp/phoneNotify', {
