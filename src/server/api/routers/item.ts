@@ -33,7 +33,7 @@ const location = z.enum([
 
 export const itemRouter = createTRPCRouter({
 	itemList: publicProcedure.query(async ({ ctx }) => {
-		return ctx.db.item.findMany();
+		return ctx.db.item.findMany({ orderBy: { createdAt: 'desc' }, where: { Active: true } });
 	}),
 
 	create: protectedProcedure

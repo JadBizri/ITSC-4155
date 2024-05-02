@@ -41,6 +41,7 @@ export default function Search() {
 			try {
 				let response = null;
 				let offerUpCat = 0;
+
 				if (query.c) {
 					switch (query.c) {
 						case 'essentials':
@@ -62,14 +63,14 @@ export default function Search() {
 							category: offerUpCat, //offerUpCat ?? null,
 						});
 					} else {
-						response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingSearch' + refresh, {
+						response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingSearch' + refresh ?? '', {
 							searchQuery: query.c as possibleQuery,
 							zipcode: '28213',
 						});
 					}
 					console.log(offerUpCat + 'second');
 				} else {
-					response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingSearch' + refresh, {
+					response = await axios.post<ModularFeedResponse>('/api/thirdParty/offerUpListingSearch' + refresh ?? '', {
 						searchQuery: query.q as possibleQuery,
 						zipcode: '28213',
 					});
@@ -101,6 +102,8 @@ export default function Search() {
 					);
 				if (!(query.c && query.q)) {
 					setLooseTileItems(prev => [...prev, ...newItems]);
+				} else {
+					setLooseTileItems([]);
 				}
 			} catch (error) {
 				console.error('Failed to fetch loose tiles:', error);
@@ -108,6 +111,7 @@ export default function Search() {
 		};
 
 		if (query.q ?? query.c) {
+			setLooseTileItems([]);
 			void fetchLooseTiles('');
 		}
 		const handleScroll = () => {
