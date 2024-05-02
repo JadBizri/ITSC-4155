@@ -4,8 +4,8 @@ import { FiMail } from 'react-icons/fi';
 const MessagesButton = ({ label }: { label: string }) => {
 	const router = useRouter();
 
-	const navigate = () => {
-		router.push('/chatOverview');
+	const navigate = async () => {
+		await router.push('/chatOverview');
 	};
 
 	return (
