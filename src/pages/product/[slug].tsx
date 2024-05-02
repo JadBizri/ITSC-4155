@@ -73,12 +73,16 @@ export default function ProductPage() {
 					buyer: sessionData?.user.id,
 				});
 				form.reset();
-				if (newPhone) {
-					const response = await axios.post('/api/otp/phoneNotify', {
-						phoneNumber: newPhone.data?.phone,
-						notifyType: 'newOffer',
-					});
-					console.log('send phone notify');
+				try {
+					if (newPhone) {
+						const response = await axios.post('/api/otp/phoneNotify', {
+							phoneNumber: newPhone.data?.phone,
+							notifyType: 'newOffer',
+						});
+						console.log('send phone notify');
+					}
+				} catch (error) {
+					console.log(error);
 				}
 				await router.push('/profile');
 			}
