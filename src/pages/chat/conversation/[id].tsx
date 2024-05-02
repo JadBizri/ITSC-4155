@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { SiteHeader } from '~/components/site-header';
 import { api } from '~/utils/api';
 import { ChevronLeft } from 'lucide-react';
+import { Footer } from '~/components/footer';
 
 const ConversationPage = () => {
 	const router = useRouter();
@@ -21,7 +22,7 @@ const ConversationPage = () => {
 	};
 
 	return (
-		<div>
+		<div className="px-10">
 			<SiteHeader />
 			{session && (
 				<div className="mb-4 flex items-center">
@@ -42,6 +43,14 @@ const ConversationPage = () => {
 							<p className="text-gray-600">Chatting as: {sessionUserName.data?.name}</p>
 						</div>
 						<ChatComponentWithConvoId conversationId={id} />
+						<p className="pt-10">
+							<iframe
+								className="m-auto w-[80%] rounded"
+								height="600"
+								src="https://maps.uncc.edu/#/?nav=plds&amp;ctr=35.30709,-80.73270000000002&amp;z=17"
+							></iframe>
+						</p>
+						<Footer />
 					</div>
 				) : (
 					<p>Loading conversation...</p>
