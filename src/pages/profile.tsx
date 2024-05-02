@@ -1,7 +1,6 @@
 import { useSession } from 'next-auth/react';
 import { SiteHeader } from '~/components/site-header';
 import Head from 'next/head';
-import router from 'next/router';
 import { ProfileImage } from '~/components/ui/profile-img';
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
 import { Button } from '~/components/ui/button';
@@ -10,17 +9,6 @@ import { Item } from '~/components/item';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import Link from 'next/link';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table';
-import {
-	AlertDialog,
-	AlertDialogAction,
-	AlertDialogCancel,
-	AlertDialogContent,
-	AlertDialogDescription,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogTitle,
-	AlertDialogTrigger,
-} from '~/components/ui/alert-dialog';
 import React from 'react';
 import { DeleteItem } from '~/components/delete-item';
 
@@ -28,13 +16,6 @@ export default function Profile() {
 	const { data: sessionData } = useSession();
 	const items = api.item.getUserItems.useQuery();
 	const userOffers = api.offer.getUserOffers.useQuery();
-	const mutation = api.user.deleteUser.useMutation();
-
-	async function handleClick() {
-		await mutation.mutateAsync();
-		await router.push('/');
-		router.reload();
-	}
 
 	if (!sessionData) {
 		return (
@@ -67,26 +48,6 @@ export default function Profile() {
 							{sessionData.user.image && <ProfileImage imageUrl={sessionData.user.image} size="100px" />}
 							<div className="ms-3 flex flex-col">
 								<h1 className="mb-3 text-4xl">Welcome, {sessionData.user.name}</h1>
-								<AlertDialog>
-									<AlertDialogTrigger asChild>
-										<Button variant="destructive">Delete Account</Button>
-									</AlertDialogTrigger>
-									<AlertDialogContent>
-										<AlertDialogHeader>
-											<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-											<AlertDialogDescription>
-												This action cannot be undone. This will permanently delete your account and remove your data
-												from our servers.
-											</AlertDialogDescription>
-										</AlertDialogHeader>
-										<AlertDialogFooter>
-											<AlertDialogCancel>Cancel</AlertDialogCancel>
-											<AlertDialogAction>
-												<Button onClick={handleClick}>Confirm</Button>
-											</AlertDialogAction>
-										</AlertDialogFooter>
-									</AlertDialogContent>
-								</AlertDialog>
 							</div>
 						</div>
 						<div className="m-10 flex w-[80%]">

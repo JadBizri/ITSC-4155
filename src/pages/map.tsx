@@ -21,7 +21,8 @@ export default function Map() {
 					>
 						Popular Campus Meetup Hotspots
 					</h1>
-					<MapComponent width="1000px" height="600px" />
+					<MapComponent width="80%" height="600px" />
+					{/* <p className='m-auto'><iframe className='m-auto rounded w-[80%]' height="600" src="https://maps.uncc.edu/#/?nav=plds&amp;ctr=35.30709,-80.73270000000002&amp;z=17"></iframe></p> */}
 				</div>
 			</div>
 		</>

@@ -23,7 +23,6 @@ const products = response
 						? 'CLOTHING'
 						: product.category.name.toUpperCase(),
 			location: 'CONE_BUILDING',
-			institution: 'UNC Charlotte',
 			slug: `${product.title.toLowerCase().replace(/ /g, '-')}-${rand(9)}`,
 			condition: 'GOOD',
 			createdById: 'cltxhhv0e0002ya6lqtp1aylt',
