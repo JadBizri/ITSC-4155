@@ -15,7 +15,7 @@ function ChatComponentWithConvoId({ conversationId }: Props) {
 	const [otherUserId, setOtherUserId] = useState<string | null>(null);
 
 	useEffect(() => {
-		if (conversationId && db) {
+		if (session && conversationId && db) {
 			const messagesCollection = query(
 				collection(db, `conversations/${conversationId}/messages`),
 				orderBy('createdAt'),
