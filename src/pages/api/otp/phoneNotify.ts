@@ -7,16 +7,16 @@ const phoneNotify = async (req: NextApiRequest, res: NextApiResponse) => {
 	let messageBody;
 	switch (notifyType) {
 		case 'newMessage':
-			messageBody = 'You have recieved a new message on your listing.';
+			messageBody = 'FlipMart - You have recieved a new message on your listing.';
 			break;
 		case 'newNewMessage':
-			messageBody = 'A new buyer sent you a message on your listing.';
+			messageBody = 'FlipMart - A new buyer sent you a message on your listing.';
 			break;
 		case 'newOffer':
-			messageBody = 'You have recieved a new Offer on your listing.';
+			messageBody = 'FlipMart - You have recieved a new Offer on your listing.';
 			break;
 		default:
-			messageBody = 'There is something exciting waiting for you in FlipMart. Visit now!';
+			messageBody = 'FlipMart - There is something exciting waiting for you. Visit now!';
 			break;
 	}
 	const client = Twilio(env.TWILIO_ACCOUNT_SID, env.TWILIO_AUTH_TOKEN);
