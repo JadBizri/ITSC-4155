@@ -7,7 +7,7 @@ import { api } from '~/utils/api';
 
 export default function ChatPage() {
 	const router = useRouter();
-	const ownerId = Array.isArray(router.query.ownerId) ? router.query.ownerId[0] : (router.query.ownerId as string);
+	const ownerId = Array.isArray(router.query.ownerId) ? router.query.ownerId[0] : router.query.ownerId!;
 	const userId = router.query.userId as string;
 
 	// Assuming userId is always a string

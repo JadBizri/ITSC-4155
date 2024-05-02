@@ -74,7 +74,7 @@ const locations = [
 	{ label: 'Elm Hall', value: 'ELM_HALL' },
 	{ label: 'Greek Village', value: 'GREEK_VILLAGE' },
 	{ label: 'Hawthorn Hall', value: 'HAWTHORN_HALL' },
-	{ label: 'Hickory & Cedar Hall', value: 'HICKORY&CEDAR_HALL' },
+	{ label: 'Hickory & Cedar Hall', value: 'HICKORY_CEDAR_HALL' },
 	{ label: 'Holshouser Hall', value: 'HOLSHOUSER_HALL' },
 	{ label: 'Hunt Hall', value: 'HUNT_HALL' },
 	{ label: 'Laurel Hall', value: 'LAUREL_HALL' },

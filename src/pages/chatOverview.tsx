@@ -4,10 +4,8 @@ import { query, collection, where, onSnapshot, type Timestamp } from 'firebase/f
 import db from '~/lib/firebase';
 import { SiteHeader } from '~/components/site-header';
 import { Footer } from '~/components/footer';
-import { api } from '~/utils/api';
-import axios from 'axios';
-import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { useRouter } from 'next/router';
+import { ChevronRight } from 'lucide-react';
 
 interface Conversation {
 	id: string;
@@ -40,8 +38,8 @@ function ChatOverview() {
 		}
 	}, [session]);
 
-	const handleConversationClick = (id: string) => {
-		router.push(`/chat/conversation/${id}`);
+	const handleConversationClick = async (id: string) => {
+		await router.push(`/chat/conversation/${id}`);
 	};
 
 	return (
@@ -63,7 +61,7 @@ function ChatOverview() {
 											User Id:{' '}
 											{convo.participants.map(participant => (participant !== session.user.id ? participant : ''))}
 										</span>
-										<ChevronRightIcon className="h-10 w-5" />
+										<ChevronRight className="h-10 w-5" />
 									</button>
 
 									<p className="mt-2 text-gray-600">Last message Sent: {convo.lastMessage}</p>

@@ -1,6 +1,5 @@
-//Dont forget to change back the === to !== for the sessionData and item.data?.createdBy.id
 import Image from 'next/image';
-import router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { SiteHeader } from '~/components/site-header';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '~/components/ui/carousel';
 import { api } from '~/utils/api';
@@ -12,7 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '~/component
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSession, signIn } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
 import Head from 'next/head';
 import { DeleteItem } from '~/components/delete-item';
@@ -137,22 +136,27 @@ export default function ProductPage() {
 							)
 						)}
 
-						{!item.data?.Active ? <p className="mt-3 text-red-500">This item is no longer available</p> : <></>}
-						<p className="leading-7 [&:not(:first-child)]:mt-6">${item.data?.price}</p>
-						<Accordion type="multiple" defaultValue={['description']} className="w-full">
-							<AccordionItem value="description" datatype="open">
-								<AccordionTrigger>Description</AccordionTrigger>
-								<AccordionContent>{item.data?.description}</AccordionContent>
-							</AccordionItem>
-							<AccordionItem value="location">
-								<AccordionTrigger>Location</AccordionTrigger>
-								<AccordionContent>{formatLocation(item.data!.location)}</AccordionContent>
-							</AccordionItem>
-							<AccordionItem value="condition">
-								<AccordionTrigger>Condition</AccordionTrigger>
-								<AccordionContent>{formatCondition(item.data!.condition)}</AccordionContent>
-							</AccordionItem>
-						</Accordion>
+						{!item.data?.Active ? (
+							<p className="mt-3 text-red-500">This item is no longer available</p>
+						) : (
+							<>
+								<p className="leading-7 [&:not(:first-child)]:mt-6">${item.data?.price}</p>
+								<Accordion type="multiple" defaultValue={['description']} className="w-full">
+									<AccordionItem value="description" datatype="open">
+										<AccordionTrigger>Description</AccordionTrigger>
+										<AccordionContent>{item.data?.description}</AccordionContent>
+									</AccordionItem>
+									<AccordionItem value="location">
+										<AccordionTrigger>Location</AccordionTrigger>
+										<AccordionContent>{formatLocation(item.data.location)}</AccordionContent>
+									</AccordionItem>
+									<AccordionItem value="condition">
+										<AccordionTrigger>Condition</AccordionTrigger>
+										<AccordionContent>{formatCondition(item.data.condition)}</AccordionContent>
+									</AccordionItem>
+								</Accordion>
+							</>
+						)}
 					</div>
 				</div>
 			</div>

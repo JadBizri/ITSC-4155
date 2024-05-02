@@ -22,7 +22,7 @@ const products = response
 					: product.category.name === 'Clothes'
 						? 'CLOTHING'
 						: product.category.name.toUpperCase(),
-			location: '28223',
+			location: 'CONE_BUILDING',
 			institution: 'UNC Charlotte',
 			slug: `${product.title.toLowerCase().replace(/ /g, '-')}-${rand(9)}`,
 			condition: 'GOOD',
