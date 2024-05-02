@@ -3,6 +3,34 @@ import { generateSlug } from '~/lib/utils';
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '~/server/api/trpc';
 
+const location = z.enum([
+	'STUDENT_UNION',
+	'ATKINS_LIBRARY',
+	'WOODWARD',
+	'UREC',
+	'CONE_BUILDING',
+	'STAR_QUAD',
+	'BELK_HALL',
+	'ELM_HALL',
+	'GREEK_VILLAGE',
+	'HAWTHORN_HALL',
+	'HICKORY_CEDAR_HALL',
+	'HOLSHOUSER_HALL',
+	'HUNT_HALL',
+	'LAUREL_HALL',
+	'LEVINE_HALL',
+	'LYNCH_HALL',
+	'MARTIN_HALL',
+	'MILTIMORE_HALL',
+	'OAK_HALL',
+	'PINE_HALL',
+	'SANFORD_HALL',
+	'SCOTT_HALL',
+	'WALLIS_HALL',
+	'WILSON_HALL',
+	'WITHERSPOON_HALL',
+]);
+
 export const itemRouter = createTRPCRouter({
 	itemList: publicProcedure.query(async ({ ctx }) => {
 		return ctx.db.item.findMany();
@@ -16,8 +44,7 @@ export const itemRouter = createTRPCRouter({
 				price: z.number().positive().safe(),
 				description: z.string().min(10).trim(),
 				images: z.array(z.string().url()),
-				location: z.string().min(5).trim(),
-				institution: z.string().min(3).trim(),
+				location,
 				condition: z.enum(['NEW', 'LIKE_NEW', 'GOOD', 'FAIR', 'POOR']),
 			}),
 		)
@@ -31,7 +58,6 @@ export const itemRouter = createTRPCRouter({
 					description: input.description,
 					images: input.images,
 					location: input.location,
-					institution: input.institution,
 					condition: input.condition,
 					createdBy: { connect: { id: ctx.session.user.id } },
 				},
@@ -81,8 +107,7 @@ export const itemRouter = createTRPCRouter({
 				price: z.number().positive().safe(),
 				description: z.string().min(10).trim(),
 				images: z.array(z.string().url()),
-				location: z.string().min(5).trim(),
-				institution: z.string().min(3).trim(),
+				location,
 				condition: z.enum(['NEW', 'LIKE_NEW', 'GOOD', 'FAIR', 'POOR']),
 				slug: z.string(),
 			}),
@@ -97,7 +122,6 @@ export const itemRouter = createTRPCRouter({
 					description: input.description,
 					images: input.images,
 					location: input.location,
-					institution: input.institution,
 					condition: input.condition,
 					createdBy: { connect: { id: ctx.session.user.id } },
 				},

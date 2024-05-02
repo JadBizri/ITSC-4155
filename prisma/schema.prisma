@@ -22,8 +22,7 @@ model Item {
     price        Float
     description  String
     images       String[]
-    location     String
-    institution  String
+    location     Location
     condition    Condition
     createdAt    DateTime  @default(now())
     updatedAt    DateTime  @updatedAt
@@ -131,4 +130,32 @@ enum Status {
     PENDING
     ACCEPTED
     REJECTED
+}
+
+enum Location {
+    STUDENT_UNION
+    ATKINS_LIBRARY
+    WOODWARD
+    UREC
+    CONE_BUILDING
+    STAR_QUAD
+    BELK_HALL
+    ELM_HALL
+    GREEK_VILLAGE
+    HAWTHORN_HALL
+    HICKORY_CEDAR_HALL
+    HOLSHOUSER_HALL
+    HUNT_HALL
+    LAUREL_HALL
+    LEVINE_HALL
+    LYNCH_HALL
+    MARTIN_HALL
+    MILTIMORE_HALL
+    OAK_HALL
+    PINE_HALL
+    SANFORD_HALL
+    SCOTT_HALL
+    WALLIS_HALL
+    WILSON_HALL
+    WITHERSPOON_HALL
 }

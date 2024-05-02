@@ -16,7 +16,7 @@ import { Textarea } from '~/components/ui/textarea';
 import { UploadDropzone } from '~/lib/uploadthing';
 import { api } from '~/utils/api';
 import { useSession } from 'next-auth/react';
-import router, { useRouter } from 'next/router';
+import router from 'next/router';
 
 const formSchema = z.object({
 	title: z.string().min(1).max(100),
@@ -35,7 +35,7 @@ const formSchema = z.object({
 		'ELM_HALL',
 		'GREEK_VILLAGE',
 		'HAWTHORN_HALL',
-		'HICKORY&CEDAR_HALL',
+		'HICKORY_CEDAR_HALL',
 		'HOLSHOUSER_HALL',
 		'HUNT_HALL',
 		'LAUREL_HALL',
@@ -51,7 +51,6 @@ const formSchema = z.object({
 		'WILSON_HALL',
 		'WITHERSPOON_HALL',
 	]),
-	institution: z.string().min(3).max(100),
 	condition: z.enum(['NEW', 'LIKE_NEW', 'GOOD', 'FAIR', 'POOR']),
 });
 
@@ -254,7 +253,7 @@ export default function Create() {
 															>
 																{field.value
 																	? locations.find(location => location.value === field.value)?.label
-																	: 'Select Location'}
+																	: 'Select location'}
 																<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 															</Button>
 														</FormControl>
@@ -262,7 +261,7 @@ export default function Create() {
 													<PopoverContent className="w-[200px] p-0">
 														<Command>
 															<CommandInput placeholder="Search location..." />
-															<CommandEmpty>No Location found.</CommandEmpty>
+															<CommandEmpty>No location found.</CommandEmpty>
 															<CommandGroup>
 																<CommandList>
 																	{locations.map(location => (
@@ -287,19 +286,6 @@ export default function Create() {
 														</Command>
 													</PopoverContent>
 												</Popover>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="institution"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Institution</FormLabel>
-												<FormControl>
-													<Input placeholder="institution" {...field} />
-												</FormControl>
 												<FormMessage />
 											</FormItem>
 										)}
