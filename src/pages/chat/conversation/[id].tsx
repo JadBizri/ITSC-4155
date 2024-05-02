@@ -3,7 +3,7 @@ import ChatComponentWithConvoId from '~/components/chatComponentWithConvoId';
 import { useSession } from 'next-auth/react';
 import { SiteHeader } from '~/components/site-header';
 import { api } from '~/utils/api';
-import { ChevronRight } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 
 const ConversationPage = () => {
 	const router = useRouter();
@@ -29,7 +29,7 @@ const ConversationPage = () => {
 						onClick={goToChatOverview}
 						className="mr-2 flex items-center rounded bg-gray-500 px-4 py-2 text-white"
 					>
-						<ChevronRight className="mr-1 h-5 w-5" /> Back To Messages
+						<ChevronLeft className="mr-1 h-5 w-5" /> Back To Messages
 					</button>
 				</div>
 			)}
