@@ -15,21 +15,21 @@ datasource db {
 }
 
 model Item {
-    id           Int      @id @default(autoincrement())
+    id           Int       @id @default(autoincrement())
     title        String
-    slug         String   @unique
+    slug         String    @unique
     category     Category
     price        Float
     description  String
     images       String[]
     location     String
     institution  String
-    condition    String
-    createdAt    DateTime @default(now())
-    updatedAt    DateTime @updatedAt
-    visits       Int      @default(0)
-    UniqueVisits Int      @default(0)
-    Active       Boolean  @default(true)
+    condition    Condition
+    createdAt    DateTime  @default(now())
+    updatedAt    DateTime  @updatedAt
+    visits       Int       @default(0)
+    UniqueVisits Int       @default(0)
+    Active       Boolean   @default(true)
 
     createdBy   User       @relation(fields: [createdById], references: [id], onDelete: Cascade)
     createdById String
@@ -83,6 +83,8 @@ model User {
     email         String?    @unique
     emailVerified DateTime?
     image         String?
+    phone         String?    @unique
+    phoneVerified DateTime?
     accounts      Account[]
     sessions      Session[]
     items         Item[]
@@ -91,13 +93,13 @@ model User {
 }
 
 model Offer {
-    id        Int      @id @default(autoincrement())
-    price     Float
-    buyerId   String
-    itemId    Int
-    status    Status   @default(PENDING)
-    item      Item     @relation(fields: [itemId], references: [id])
-    buyer     User     @relation(fields: [buyerId], references: [id])
+    id      Int    @id @default(autoincrement())
+    price   Float
+    buyerId String
+    itemId  Int
+    status  Status @default(PENDING)
+    item    Item   @relation(fields: [itemId], references: [id])
+    buyer   User   @relation(fields: [buyerId], references: [id])
 }
 
 model VerificationToken {
@@ -115,6 +117,14 @@ enum Category {
     ESSENTIALS
     FURNITURE
     OTHER
+}
+
+enum Condition {
+    NEW
+    LIKE_NEW
+    GOOD
+    FAIR
+    POOR
 }
 
 enum Status {

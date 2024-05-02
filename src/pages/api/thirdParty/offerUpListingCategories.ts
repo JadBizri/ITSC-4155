@@ -38,13 +38,14 @@ export const thirdPartyCatergories = async (req: NextApiRequest, res: NextApiRes
 			variables: {
 				debug: false,
 				searchParams: [
-					{ key: 'DISTANCE', value: '5' },
+					{ key: 'DELIVERY_FLAGS', value: 'p' },
+					{ key: 'DISTANCE', value: '10' },
 					{ key: 'platform', value: 'web_mobile' },
 					{ key: 'zipcode', value: zipcode },
 					{ key: 'experiment_id', value: 'experimentmodel24' },
 					{ key: 'limit', value: '50' },
 					{ key: 'searchSessionId', value: '52c93fc1-58fb-4545-83ad-59dd8bb18a62' },
-					{ key: 'cid', value: category.toString() }, //all clothing
+					{ key: 'cid', value: category.toString() },
 					{ key: 'page_cursor', value: pageCursor[Math.floor(Math.random() * (pageCursor.length + 1))] },
 				],
 			},

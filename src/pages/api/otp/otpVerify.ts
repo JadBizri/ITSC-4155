@@ -14,10 +14,11 @@ const otpVerify = async (req: NextApiRequest, res: NextApiResponse) => {
 			res.status(200).json({ msg: `Verified!` });
 		} else {
 			res.status(500).json({ msg: `Failed to verify ` + String(result.status) });
+			//res.status(500).json({ result });
 		}
 	} catch (error) {
 		console.error(error);
-		res.status(500).json({ error: 'Failed to verify' });
+		res.status(500).json({ error: 'Error as Occured' });
 	}
 };
 

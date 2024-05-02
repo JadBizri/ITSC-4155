@@ -31,8 +31,9 @@ export const thirdPartyHome = async (req: NextApiRequest, res: NextApiResponse) 
 				variables: {
 					debug: false,
 					searchParams: [
-						{ key: 'DISTANCE', value: '5' },
+						{ key: 'DISTANCE', value: '10' },
 						{ key: 'q', value: 'textbook' },
+						//{ key: 'DELIVERY_FLAGS', value: 'p'},
 						{ key: 'platform', value: 'web_mobile' },
 						{ key: 'zipcode', value: zipcode },
 						{ key: 'experiment_id', value: 'experimentmodel24' },
@@ -47,8 +48,9 @@ export const thirdPartyHome = async (req: NextApiRequest, res: NextApiResponse) 
 				variables: {
 					debug: false,
 					searchParams: [
-						{ key: 'DISTANCE', value: '5' },
+						{ key: 'DISTANCE', value: '10' },
 						{ key: 'q', value: 'school supplies' },
+						//{ key: 'DELIVERY_FLAGS', value: 'p'},
 						{ key: 'platform', value: 'web_mobile' },
 						{ key: 'zipcode', value: zipcode },
 						{ key: 'experiment_id', value: 'experimentmodel24' },
@@ -64,7 +66,8 @@ export const thirdPartyHome = async (req: NextApiRequest, res: NextApiResponse) 
 				variables: {
 					debug: false,
 					searchParams: [
-						{ key: 'DISTANCE', value: '5' },
+						{ key: 'DELIVERY_FLAGS', value: 'p' },
+						{ key: 'DISTANCE', value: '10' },
 						{ key: 'platform', value: 'web_mobile' },
 						{ key: 'zipcode', value: zipcode },
 						{ key: 'experiment_id', value: 'experimentmodel24' },
@@ -81,7 +84,8 @@ export const thirdPartyHome = async (req: NextApiRequest, res: NextApiResponse) 
 				variables: {
 					debug: false,
 					searchParams: [
-						{ key: 'DISTANCE', value: '5' },
+						{ key: 'DELIVERY_FLAGS', value: 'p' },
+						{ key: 'DISTANCE', value: '10' },
 						{ key: 'platform', value: 'web_mobile' },
 						{ key: 'zipcode', value: zipcode },
 						{ key: 'experiment_id', value: 'experimentmodel24' },
@@ -98,7 +102,8 @@ export const thirdPartyHome = async (req: NextApiRequest, res: NextApiResponse) 
 				variables: {
 					debug: false,
 					searchParams: [
-						{ key: 'DISTANCE', value: '5' },
+						{ key: 'DELIVERY_FLAGS', value: 'p' },
+						{ key: 'DISTANCE', value: '10' },
 						{ key: 'platform', value: 'web_mobile' },
 						{ key: 'zipcode', value: zipcode },
 						{ key: 'experiment_id', value: 'experimentmodel24' },

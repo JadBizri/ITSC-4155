@@ -49,6 +49,7 @@ export const thirdPartyHomeReload = async (req: NextApiRequest, res: NextApiResp
 				variables: {
 					debug: false,
 					searchParams: [
+						{ key: 'DELIVERY_FLAGS', value: 'p' },
 						{ key: 'DISTANCE', value: '5' },
 						{ key: 'platform', value: 'web_mobile' },
 						{ key: 'zipcode', value: zipcode },
@@ -67,6 +68,7 @@ export const thirdPartyHomeReload = async (req: NextApiRequest, res: NextApiResp
 				variables: {
 					debug: false,
 					searchParams: [
+						{ key: 'DELIVERY_FLAGS', value: 'p' },
 						{ key: 'DISTANCE', value: '5' },
 						{ key: 'platform', value: 'web_mobile' },
 						{ key: 'zipcode', value: zipcode },
@@ -85,7 +87,8 @@ export const thirdPartyHomeReload = async (req: NextApiRequest, res: NextApiResp
 				variables: {
 					debug: false,
 					searchParams: [
-						{ key: 'DISTANCE', value: '5' },
+						{ key: 'DELIVERY_FLAGS', value: 'p' },
+						{ key: 'DISTANCE', value: '10' },
 						{ key: 'platform', value: 'web_mobile' },
 						{ key: 'zipcode', value: zipcode },
 						{ key: 'experiment_id', value: 'experimentmodel24' },

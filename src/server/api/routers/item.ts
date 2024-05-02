@@ -39,7 +39,7 @@ export const itemRouter = createTRPCRouter({
 		}),
 
 	getItemSlug: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
-		return ctx.db.item.findFirst({ where: { slug: input }, include: { offers: true, createdBy: true } });
+		return await ctx.db.item.findFirst({ where: { slug: input }, include: { offers: true, createdBy: true } });
 	}),
 
 	getItemMatchList: publicProcedure
@@ -72,4 +72,35 @@ export const itemRouter = createTRPCRouter({
 	deleteUserItem: protectedProcedure.input(z.number()).mutation(async ({ ctx, input }) => {
 		return ctx.db.item.delete({ where: { id: input, createdBy: { id: ctx.session.user.id } } });
 	}),
+
+	editItem: protectedProcedure
+		.input(
+			z.object({
+				title: z.string().min(1).trim(),
+				category: z.enum(['TEXTBOOKS', 'ELECTRONICS', 'CLOTHING', 'ESSENTIALS', 'FURNITURE', 'OTHER']),
+				price: z.number().positive().safe(),
+				description: z.string().min(10).trim(),
+				images: z.array(z.string().url()),
+				location: z.string().min(5).trim(),
+				institution: z.string().min(3).trim(),
+				condition: z.enum(['NEW', 'LIKE_NEW', 'GOOD', 'FAIR', 'POOR']),
+				slug: z.string(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return ctx.db.item.update({
+				where: { slug: input.slug },
+				data: {
+					title: input.title,
+					category: input.category,
+					price: input.price,
+					description: input.description,
+					images: input.images,
+					location: input.location,
+					institution: input.institution,
+					condition: input.condition,
+					createdBy: { connect: { id: ctx.session.user.id } },
+				},
+			});
+		}),
 });

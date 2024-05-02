@@ -15,6 +15,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession, signIn } from 'next-auth/react';
 
 import Head from 'next/head';
+import { DeleteItem } from '~/components/delete-item';
+import Link from 'next/link';
 
 const formSchema = z.object({
 	price: z.coerce.number().positive().safe(),
@@ -66,6 +68,7 @@ export default function ProductPage() {
 			});
 		}
 	}
+
 	return (
 		<>
 			<Head>
@@ -119,17 +122,17 @@ export default function ProductPage() {
 									Message Owner
 								</Button>
 							</div>
-						) : !session ? (
-							<Button
-								onClick={() => signIn('google')}
-								className="ml-1 mt-6 rounded border border-black bg-white px-4 py-2 font-bold text-black hover:bg-gray-200"
-							>
-								Login to Contact Seller
-							</Button>
 						) : (
-							<p className="ml-4 mt-3 rounded border-l-4 border-green-500 bg-green-100 px-4 py-2 text-lg font-semibold text-green-700 shadow">
-								<i className="fas fa-info-circle"></i> This product listing belongs to you.
-							</p>
+							sessionData &&
+							item.data &&
+							sessionData.user.id == item.data.createdBy.id && (
+								<div className="mt-3 flex items-center gap-2">
+									<DeleteItem id={item.data.id} redirect />
+									<Link href={`/product/${item.data.slug}/edit`}>
+										<Button variant="secondary">Edit</Button>
+									</Link>
+								</div>
+							)
 						)}
 
 						{!item.data?.Active ? <p className="mt-3 text-red-500">This item is no longer available</p> : <></>}
