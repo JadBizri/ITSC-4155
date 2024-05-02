@@ -45,6 +45,13 @@ export default function ChatPage() {
 				</div>
 				{userId && ownerId && <ChatComponentWithId userId={userId} otherUserId={ownerId} />}
 			</div>
+			<p className="">
+				<iframe
+					className="m-auto w-[80%] rounded"
+					height="600"
+					src="https://maps.uncc.edu/#/?nav=plds&amp;ctr=35.30709,-80.73270000000002&amp;z=17"
+				></iframe>
+			</p>
 			<Footer />
 		</div>
 	);
