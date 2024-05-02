@@ -21,7 +21,7 @@ export default function ChatPage() {
 	if (!session || session.user.id !== userId) {
 		return (
 			<div className="flex min-h-screen items-center justify-center text-lg font-bold text-red-500">
-				Access Denied. You shouldn't be here bud
+				Access Denied. You shouldn&apos;t be here bud
 			</div>
 		);
 	}

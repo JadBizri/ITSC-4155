@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { SiteHeader } from '~/components/site-header';
@@ -15,17 +15,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '~/components/ui/input-otp';
 import { api } from '~/utils/api';
 import { formatPhoneNumber } from '~/lib/utils';
-import {
-	AlertDialog,
-	AlertDialogAction,
-	AlertDialogCancel,
-	AlertDialogContent,
-	AlertDialogDescription,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogTitle,
-	AlertDialogTrigger,
-} from '~/components/ui/alert-dialog';
 
 export default function Profile() {
 	const mutation = api.user.verifyUser.useMutation();

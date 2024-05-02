@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 //src\lib\firebase .ts
 
-import { Firestore } from 'firebase/firestore';
+import type { Firestore } from 'firebase/firestore';
 
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';

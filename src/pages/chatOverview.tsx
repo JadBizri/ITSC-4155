@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { query, collection, where, onSnapshot, Firestore, Timestamp } from 'firebase/firestore';
+import { query, collection, where, onSnapshot, type Timestamp } from 'firebase/firestore';
 import db from '~/lib/firebase';
 import { SiteHeader } from '~/components/site-header';
 import { Footer } from '~/components/footer';
@@ -18,10 +18,7 @@ function ChatOverview() {
 
 	useEffect(() => {
 		if (session && session.user && session.user.id && db) {
-			const q = query(
-				collection(db as Firestore, 'conversations'),
-				where('participants', 'array-contains', session.user.id),
-			);
+			const q = query(collection(db, 'conversations'), where('participants', 'array-contains', session.user.id));
 			const unsubscribe = onSnapshot(q, snapshot => {
 				const loadedConversations = snapshot.docs.map(doc => ({
 					...(doc.data() as Conversation),

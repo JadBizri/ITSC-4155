@@ -29,9 +29,9 @@ export default function ProductPage() {
 	const { data: sessionData } = useSession();
 	const { data: session } = useSession();
 
-	const handleMessageOwner = () => {
+	const handleMessageOwner = async () => {
 		if (session && item.data?.createdById) {
-			router.push(`/chat/${item.data.createdById}/${session.user.id}`);
+			await router.push(`/chat/${item.data.createdById}/${session.user.id}`);
 		} else {
 			console.error('Session is null, cannot handle message owner.');
 		}

@@ -24,17 +24,18 @@ function ChatComponentWithConvoId({ conversationId }: Props) {
 			const unsubscribeMessages = onSnapshot(messagesCollection, snapshot => {
 				const loadedMessages = snapshot.docs.map(doc => ({
 					id: doc.id,
-					text: doc.data().text,
+					text: doc.data().text as string,
 				}));
 				setMessages(loadedMessages);
 			});
 
 			const conversationRef = doc(db, `conversations/${conversationId}`);
-			getDoc(conversationRef).then(docSnapshot => {
+			void getDoc(conversationRef).then(docSnapshot => {
 				const data = docSnapshot.data();
 				if (data && session?.user?.id) {
-					const otherId = data.participants.find((id: string) => id !== session.user.id);
-					setOtherUserId(otherId || null);
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+					const otherId = data.participants.find((id: string) => id !== session.user.id) as string;
+					setOtherUserId(otherId ?? null);
 				}
 			});
 

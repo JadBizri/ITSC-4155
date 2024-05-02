@@ -27,7 +27,7 @@ function ChatComponentWithId({ userId, otherUserId }: Props) {
 		const unsubscribe = onSnapshot(messagesCollection, snapshot => {
 			const loadedMessages = snapshot.docs.map(doc => ({
 				id: doc.id,
-				text: doc.data().text,
+				text: doc.data().text as string,
 			}));
 			setMessages(loadedMessages);
 		});
