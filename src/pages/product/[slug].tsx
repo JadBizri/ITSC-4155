@@ -1,3 +1,4 @@
+//Dont forget to change back the === to !== for the sessionData and item.data?.createdBy.id
 import Image from 'next/image';
 import router, { useRouter } from 'next/router';
 import { SiteHeader } from '~/components/site-header';
@@ -11,7 +12,8 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '~/component
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSession } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
+
 import Head from 'next/head';
 
 const formSchema = z.object({
@@ -19,9 +21,19 @@ const formSchema = z.object({
 });
 
 export default function ProductPage() {
+	const router = useRouter();
 	const { query } = useRouter();
 	const item = api.item.getItemSlug.useQuery(query.slug as string);
 	const { data: sessionData } = useSession();
+	const { data: session } = useSession();
+
+	const handleMessageOwner = () => {
+		if (session && item.data?.createdById) {
+			router.push(`/chat/${item.data.createdById}/${session.user.id}`);
+		} else {
+			console.error('Session is null, cannot handle message owner.');
+		}
+	};
 
 	console.log(item.data);
 
@@ -77,6 +89,7 @@ export default function ProductPage() {
 					</Carousel>
 					<div>
 						<h1 className="scroll-m-20 text-4xl font-bold tracking-tight lg:text-5xl">{item.data?.title}</h1>
+
 						{sessionData && sessionData.user.id !== item.data?.createdBy.id ? (
 							<div className="mt-3 flex items-center">
 								<Form {...form}>
@@ -100,10 +113,25 @@ export default function ProductPage() {
 										</form>
 									</FormItem>
 								</Form>
+
+								{/* Message Owner Button */}
+								<Button variant="default" onClick={handleMessageOwner} className="ml-4">
+									Message Owner
+								</Button>
 							</div>
+						) : !session ? (
+							<Button
+								onClick={() => signIn('google')}
+								className="ml-1 mt-6 rounded border border-black bg-white px-4 py-2 font-bold text-black hover:bg-gray-200"
+							>
+								Login to Contact Seller
+							</Button>
 						) : (
-							<></>
+							<p className="ml-4 mt-3 rounded border-l-4 border-green-500 bg-green-100 px-4 py-2 text-lg font-semibold text-green-700 shadow">
+								<i className="fas fa-info-circle"></i> This product listing belongs to you.
+							</p>
 						)}
+
 						{!item.data?.Active ? <p className="mt-3 text-red-500">This item is no longer available</p> : <></>}
 						<p className="leading-7 [&:not(:first-child)]:mt-6">${item.data?.price}</p>
 						<Accordion type="multiple" defaultValue={['description']} className="w-full">
