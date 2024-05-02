@@ -19,6 +19,7 @@ function ChatComponentWithConvoId({ conversationId }: Props) {
 	const currentUser = session?.user?.id;
 	const userName = api.user.getUserNameById.useQuery(session?.user?.id ?? '');
 	const otherName = api.user.getUserNameById.useQuery(otherUserId ?? '');
+	const newPhone = api.user.getUserPhonebyId.useQuery(otherUserId ?? '');
 
 	useEffect(() => {
 		if (conversationId && db) {
@@ -55,7 +56,6 @@ function ChatComponentWithConvoId({ conversationId }: Props) {
 		if (message.trim() !== '' && session?.user?.id && otherUserId) {
 			await sendMessage(message, session.user.id, otherUserId, conversationId);
 			setMessage('');
-			const newPhone = api.user.getUserPhonebyId.useQuery(otherUserId ?? '');
 			try {
 				if (newPhone) {
 					const response = await axios.post('/api/otp/phoneNotify', {
