@@ -16,7 +16,7 @@ import { Textarea } from '~/components/ui/textarea';
 import { UploadDropzone } from '~/lib/uploadthing';
 import { api } from '~/utils/api';
 import { useSession } from 'next-auth/react';
-import router, { useRouter } from 'next/router';
+import router from 'next/router';
 
 const formSchema = z.object({
 	title: z.string().min(1).max(100),
@@ -24,8 +24,33 @@ const formSchema = z.object({
 	price: z.coerce.number().positive().safe(),
 	description: z.string().min(10).max(500),
 	images: z.array(z.string().url()),
-	location: z.string().min(5).max(100),
-	institution: z.string().min(3).max(100),
+	location: z.enum([
+		'STUDENT_UNION',
+		'ATKINS_LIBRARY',
+		'WOODWARD',
+		'UREC',
+		'CONE_BUILDING',
+		'STAR_QUAD',
+		'BELK_HALL',
+		'ELM_HALL',
+		'GREEK_VILLAGE',
+		'HAWTHORN_HALL',
+		'HICKORY_CEDAR_HALL',
+		'HOLSHOUSER_HALL',
+		'HUNT_HALL',
+		'LAUREL_HALL',
+		'LEVINE_HALL',
+		'LYNCH_HALL',
+		'MARTIN_HALL',
+		'MILTIMORE_HALL',
+		'OAK_HALL',
+		'PINE_HALL',
+		'SANFORD_HALL',
+		'SCOTT_HALL',
+		'WALLIS_HALL',
+		'WILSON_HALL',
+		'WITHERSPOON_HALL',
+	]),
 	condition: z.enum(['NEW', 'LIKE_NEW', 'GOOD', 'FAIR', 'POOR']),
 });
 
@@ -36,6 +61,34 @@ const categories = [
 	{ label: 'Essentials', value: 'ESSENTIALS' },
 	{ label: 'Furniture', value: 'FURNITURE' },
 	{ label: 'Other', value: 'OTHER' },
+] as const;
+
+const locations = [
+	{ label: 'Student Union', value: 'STUDENT_UNION' },
+	{ label: 'Atkins Library', value: 'ATKINS_LIBRARY' },
+	{ label: 'Woodward', value: 'WOODWARD' },
+	{ label: 'UREC', value: 'UREC' },
+	{ label: 'Cone Building', value: 'CONE_BUILDING' },
+	{ label: 'Star Quad', value: 'STAR_QUAD' },
+	{ label: 'Belk Hall', value: 'BELK_HALL' },
+	{ label: 'Elm Hall', value: 'ELM_HALL' },
+	{ label: 'Greek Village', value: 'GREEK_VILLAGE' },
+	{ label: 'Hawthorn Hall', value: 'HAWTHORN_HALL' },
+	{ label: 'Hickory & Cedar Hall', value: 'HICKORY&CEDAR_HALL' },
+	{ label: 'Holshouser Hall', value: 'HOLSHOUSER_HALL' },
+	{ label: 'Hunt Hall', value: 'HUNT_HALL' },
+	{ label: 'Laurel Hall', value: 'LAUREL_HALL' },
+	{ label: 'Levine Hall', value: 'LEVINE_HALL' },
+	{ label: 'Lynch Hall', value: 'LYNCH_HALL' },
+	{ label: 'Martin Hall', value: 'MARTIN_HALL' },
+	{ label: 'Miltimore Hall', value: 'MILTIMORE_HALL' },
+	{ label: 'Oak Hall', value: 'OAK_HALL' },
+	{ label: 'Pine Hall', value: 'PINE_HALL' },
+	{ label: 'Sanford Hall', value: 'SANFORD_HALL' },
+	{ label: 'Scott Hall', value: 'SCOTT_HALL' },
+	{ label: 'Wallis Hall', value: 'WALLIS_HALL' },
+	{ label: 'Wilson Hall', value: 'WILSON_HALL' },
+	{ label: 'Witherspoon Hall', value: 'WITHERSPOON_HALL' },
 ] as const;
 
 const conditions = [
@@ -188,24 +241,51 @@ export default function Create() {
 										control={form.control}
 										name="location"
 										render={({ field }) => (
-											<FormItem>
+											<FormItem className="flex flex-col">
 												<FormLabel>Location</FormLabel>
-												<FormControl>
-													<Input placeholder="location" {...field} />
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="institution"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Institution</FormLabel>
-												<FormControl>
-													<Input placeholder="institution" {...field} />
-												</FormControl>
+												<Popover>
+													<PopoverTrigger asChild>
+														<FormControl>
+															<Button
+																variant="outline"
+																role="combobox"
+																className={cn('w-[200px] justify-between', !field.value && 'text-muted-foreground')}
+															>
+																{field.value
+																	? locations.find(location => location.value === field.value)?.label
+																	: 'Select location'}
+																<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+															</Button>
+														</FormControl>
+													</PopoverTrigger>
+													<PopoverContent className="w-[200px] p-0">
+														<Command>
+															<CommandInput placeholder="Search location..." />
+															<CommandEmpty>No location found.</CommandEmpty>
+															<CommandGroup>
+																<CommandList>
+																	{locations.map(location => (
+																		<CommandItem
+																			value={location.label}
+																			key={location.value}
+																			onSelect={() => {
+																				form.setValue('location', location.value);
+																			}}
+																		>
+																			<Check
+																				className={cn(
+																					'mr-2 h-4 w-4',
+																					location.value === field.value ? 'opacity-100' : 'opacity-0',
+																				)}
+																			/>
+																			{location.label}
+																		</CommandItem>
+																	))}
+																</CommandList>
+															</CommandGroup>
+														</Command>
+													</PopoverContent>
+												</Popover>
 												<FormMessage />
 											</FormItem>
 										)}

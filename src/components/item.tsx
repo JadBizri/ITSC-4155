@@ -2,8 +2,9 @@ import Image from 'next/image';
 import { AspectRatio } from './ui/aspect-ratio';
 import type { Item } from '@prisma/client';
 import Link from 'next/link';
+import { formatLocation } from '~/lib/utils';
 
-export function Item({ title, images, price, institution, slug }: Item) {
+export function Item({ title, images, price, location, slug }: Item) {
 	if (!slug.startsWith('https')) {
 		slug = '/product/' + slug;
 	}
@@ -23,13 +24,13 @@ export function Item({ title, images, price, institution, slug }: Item) {
 				<p className="truncate leading-7 text-zinc-950 dark:text-white">{title}</p>
 				{slug.startsWith('https') ? (
 					<div className="mt-1 flex">
-						<small className="text-sm font-medium leading-none text-zinc-950/50 dark:text-white/50">
-							{institution}
-						</small>
-						<img className="-mt-1" src="/icon_external.svg" alt="" height={20} width={20} />
+						<small className="text-sm font-medium leading-none text-zinc-950/50 dark:text-white/50">OfferUp</small>
+						<Image className="-mt-1" src="/icon_external.svg" alt="" height={20} width={20} />
 					</div>
 				) : (
-					<small className="text-sm font-medium leading-none text-zinc-950/50 dark:text-white/50">{institution}</small>
+					<small className="text-sm font-medium leading-none text-zinc-950/50 dark:text-white/50">
+						{formatLocation(location)}
+					</small>
 				)}
 			</Link>
 		</div>

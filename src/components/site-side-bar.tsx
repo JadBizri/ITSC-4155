@@ -3,6 +3,34 @@ import Link from 'next/link';
 import { Separator } from './ui/separator';
 
 export function SiteSideBar({ query }: { query: string | undefined } = { query: undefined }) {
+	const locations = [
+		{ label: 'Student Union', value: 'STUDENT_UNION' },
+		{ label: 'Atkins Library', value: 'ATKINS_LIBRARY' },
+		{ label: 'Woodward', value: 'WOODWARD' },
+		{ label: 'UREC', value: 'UREC' },
+		{ label: 'Cone Building', value: 'CONE_BUILDING' },
+		{ label: 'Star Quad', value: 'STAR_QUAD' },
+		{ label: 'Belk Hall', value: 'BELK_HALL' },
+		{ label: 'Elm Hall', value: 'ELM_HALL' },
+		{ label: 'Greek Village', value: 'GREEK_VILLAGE' },
+		{ label: 'Hawthorn Hall', value: 'HAWTHORN_HALL' },
+		{ label: 'Hickory & Cedar Hall', value: 'HICKORY_CEDAR_HALL' },
+		{ label: 'Holshouser Hall', value: 'HOLSHOUSER_HALL' },
+		{ label: 'Hunt Hall', value: 'HUNT_HALL' },
+		{ label: 'Laurel Hall', value: 'LAUREL_HALL' },
+		{ label: 'Levine Hall', value: 'LEVINE_HALL' },
+		{ label: 'Lynch Hall', value: 'LYNCH_HALL' },
+		{ label: 'Martin Hall', value: 'MARTIN_HALL' },
+		{ label: 'Miltimore Hall', value: 'MILTIMORE_HALL' },
+		{ label: 'Oak Hall', value: 'OAK_HALL' },
+		{ label: 'Pine Hall', value: 'PINE_HALL' },
+		{ label: 'Sanford Hall', value: 'SANFORD_HALL' },
+		{ label: 'Scott Hall', value: 'SCOTT_HALL' },
+		{ label: 'Wallis Hall', value: 'WALLIS_HALL' },
+		{ label: 'Wilson Hall', value: 'WILSON_HALL' },
+		{ label: 'Witherspoon Hall', value: 'WITHERSPOON_HALL' },
+	] as const;
+
 	return (
 		<aside className="block pl-6">
 			<h4 className="mb-2 scroll-m-20 text-xl font-semibold tracking-tight">Categories</h4>
@@ -50,18 +78,11 @@ export function SiteSideBar({ query }: { query: string | undefined } = { query: 
 			<Separator className="my-4" />
 			<h4 className="mb-2 scroll-m-20 text-xl font-semibold tracking-tight">Campus</h4>
 			<div className="flex flex-col gap-2">
-				<Link href="">
-					<p className="leading-7">North Village</p>
-				</Link>
-				<Link href="">
-					<p className="leading-7">South Village</p>
-				</Link>
-				<Link href="">
-					<p className="leading-7">East Village</p>
-				</Link>
-				<Link href="">
-					<p className="leading-7">Student Union</p>
-				</Link>
+				{locations.map(location => (
+					<Link key={location.value} href="">
+						<p className="leading-7">{location.label}</p>
+					</Link>
+				))}
 			</div>
 		</aside>
 	);
