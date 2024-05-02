@@ -32,20 +32,29 @@ function ChatOverview() {
 	}, [session]);
 
 	return (
-		<div className="min-h-screen bg-gray-100">
+		<div>
 			<SiteHeader />
 			<div className="container mx-auto px-4">
-				<h1 className="my-6 text-2xl font-semibold text-gray-800">Your Conversations</h1>
-				<ul className="space-y-4">
-					{conversations.map(convo => (
-						<li key={convo.id} className="rounded-lg bg-white p-4 shadow transition duration-150 hover:bg-gray-50">
-							<a href={`/chat/conversation/${convo.id}`} className="text-blue-500 hover:text-blue-700">
-								Chat with {convo.participants.filter(p => p !== session?.user?.id).join(', ')}
-							</a>
-							<p className="mt-2 text-gray-600">Last message Sent: {convo.lastMessage}</p>
-						</li>
-					))}
-				</ul>
+				{session && session.user && session.user.id && db ? (
+					<>
+						<h1 className="my-6 text-2xl font-semibold">Your Conversations</h1>
+						<ul className="space-y-4">
+							{conversations.map(convo => (
+								<li key={convo.id} className="rounded-lg bg-white p-4 shadow transition duration-150 hover:bg-gray-50">
+									<a href={`/chat/conversation/${convo.id}`} className="text-blue-500 hover:text-blue-700">
+										Chat with {convo.participants.filter(p => p !== session?.user?.id).join(', ')}
+									</a>
+									<p className="mt-2 text-gray-600">Last message Sent: {convo.lastMessage}</p>
+								</li>
+							))}
+						</ul>
+					</>
+				) : (
+					<div className="mb-4 rounded-lg p-4 shadow">
+						<h1 className="text-xl font-semibold">Welcome</h1>
+						<p>Please sign in to view your conversations</p>
+					</div>
+				)}
 			</div>
 			<Footer />
 		</div>
