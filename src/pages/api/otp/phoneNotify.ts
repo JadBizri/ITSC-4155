@@ -9,8 +9,11 @@ const phoneNotify = async (req: NextApiRequest, res: NextApiResponse) => {
 		case 'newMessage':
 			messageBody = 'You have recieved a new message on your listing.';
 			break;
+		case 'newNewMessage':
+			messageBody = 'A new buyer sent you a message on your listing.';
+			break;
 		case 'newOffer':
-			messageBody = 'You have recieved a new message on your listing.';
+			messageBody = 'You have recieved a new Offer on your listing.';
 			break;
 		default:
 			messageBody = 'There is something exciting waiting for you in FlipMart. Visit now!';
@@ -23,14 +26,14 @@ const phoneNotify = async (req: NextApiRequest, res: NextApiResponse) => {
 			from: env.TWILIO_PHONE_NUMBER,
 			body: messageBody,
 		});
-		if (result.status === 'sent') {
-			res.status(200).json({ msg: `Verification code sent!` });
+		if (result.status === 'sent' || 'queued') {
+			res.status(200).json({ msg: `Message sent!` });
 		} else {
-			res.status(500).json({ msg: `Failed to send OTP => ${String(result.status)}` });
+			res.status(500).json({ msg: `Failed to send message => ${String(result.status)}` });
 		}
 	} catch (error) {
 		console.error(error);
-		res.status(500).json({ error: `Failed to send OTP => ${String(error)}` });
+		res.status(500).json({ error: `Failed to send message => error` });
 	}
 };
 
