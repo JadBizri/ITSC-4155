@@ -15,9 +15,21 @@ import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '~/components/ui/input-otp';
 import { api } from '~/utils/api';
 import { formatPhoneNumber } from '~/lib/utils';
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from '~/components/ui/alert-dialog';
 
 export default function Profile() {
 	const mutation = api.user.verifyUser.useMutation();
+	const deleteMutation = api.user.deleteUser.useMutation();
 
 	const { data: sessionData } = useSession();
 	const [phoneNumber, setPhoneNumber] = useState('');
@@ -31,6 +43,12 @@ export default function Profile() {
 	const [shouldReload, setShouldReload] = useState(false);
 
 	const user = api.user.getUser.useQuery();
+
+	async function handleClick() {
+		await deleteMutation.mutateAsync();
+		await router.push('/');
+		router.reload();
+	}
 
 	useEffect(() => {
 		if (user.data?.phoneVerified) {
@@ -105,6 +123,7 @@ export default function Profile() {
 				await mutation.mutateAsync({ phone: phoneNumber, phoneVerified: new Date() });
 				setPhoneVerified(true);
 				setShouldReload(true);
+				router.reload();
 			} else {
 				setPhoneVerified(false);
 				setShouldReload(false);
@@ -133,7 +152,29 @@ export default function Profile() {
 				<div className="mt-8 flex flex-col items-center space-y-10 text-center">
 					<div className="flex flex-col items-center">
 						{sessionData.user.image && <ProfileImage imageUrl={sessionData.user.image} size="100px" />}
-						<h1 className="mt-3 text-4xl">Profile Settings</h1>
+						<h1 className="mt-3 text-4xl">{sessionData.user.name}</h1>
+						<AlertDialog>
+							<AlertDialogTrigger asChild>
+								<Button className="mt-3" variant="destructive">
+									Delete Account
+								</Button>
+							</AlertDialogTrigger>
+							<AlertDialogContent>
+								<AlertDialogHeader>
+									<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+									<AlertDialogDescription>
+										This action cannot be undone. This will permanently delete your account and remove your data from
+										our servers.
+									</AlertDialogDescription>
+								</AlertDialogHeader>
+								<AlertDialogFooter>
+									<AlertDialogCancel>Cancel</AlertDialogCancel>
+									<AlertDialogAction>
+										<Button onClick={handleClick}>Confirm</Button>
+									</AlertDialogAction>
+								</AlertDialogFooter>
+							</AlertDialogContent>
+						</AlertDialog>
 						<div className="m-10 flex w-[80%]">
 							<Tabs defaultValue="account" className="w-[400px]">
 								<TabsList className="grid w-full grid-cols-1">
@@ -143,6 +184,9 @@ export default function Profile() {
 									<Card>
 										<CardHeader>
 											<CardTitle>Phone Number</CardTitle>
+											{user.data?.phoneVerified && (
+												<p className="text-green-500">Phone number is added and verified!</p>
+											)}
 											<CardDescription>{cardDescription}</CardDescription>
 										</CardHeader>
 										<CardContent className="space-y-2">
@@ -151,6 +195,7 @@ export default function Profile() {
 													format="+1 (###) ### - ####"
 													placeholder={formatPhoneNumber(user.data?.phone ?? '1234567890') ?? '+1 (123) 456 - 7890'}
 													customInput={Input}
+													value={user.data?.phone ?? ''}
 													onValueChange={values => setPhoneNumber(values.value)}
 												/>
 											</div>
