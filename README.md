@@ -1,9 +1,16 @@
 # FLipMart
 ● A student-exclusive marketplace using Next.js in React was deployed using Vercel.app, enabling secure communication to buy, sell, and discover products.
-● Using NextJS framework with TypeScript, HTML, CSS for front end development.
+
+● Using NextJS framework with TypeScript and TailWind CSS for front end development.
+
+● Using Prisma with PostgresSQL for database development.
+
 ● Implemented Google’s SSO OAuth login using NextAuth, restricting account creation to students only, ensuring a secure and exclusive user base.
+
 ● Integrated Twilio APIs for SMS messaging notifications and alerts, enhancing user engagement and communication.
+
 ● Integrated Firebase Cloud Messaging solution to provide real-time messaging functionality between sellers andbuyers, enhancing communication within the application.
+
 ● Utilized PostgreSQL for data manipulation and storage, ensuring efficient management and retrieval of data.
 
 ## Run Locally
